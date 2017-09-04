@@ -14,3 +14,9 @@ console.log('Building CommonJS modules ...')
 exec('babel src -d . --ignore __tests__', {
   BABEL_ENV: 'cjs'
 })
+
+console.log('\nBuilding ES modules ...')
+
+exec('babel src -d es --ignore __tests__', {
+  BABEL_ENV: 'es'
+})
