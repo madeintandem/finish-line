@@ -3,6 +3,13 @@
   "version": "0.0.1",
   "description": "Helpful components and tools to build React and Relay applications more quickly and easily",
   "main": "index.js",
+  "module": "es/index.js",
+  "files": [
+   "HelloWorld.js",
+   "es",
+   "index.js",
+   "umd"
+ ],
   "scripts": {
     "build": "node ./tools/build.js",
     "test": "jest"
