@@ -20,3 +20,23 @@ console.log('\nBuilding ES modules ...')
 exec('babel src -d es --ignore __tests__', {
   BABEL_ENV: 'es'
 })
+
+console.log('\nBuilding finish-line.js ...')
+
+exec('rollup -i src/index.js -c -f umd -o umd/finish-line.js', {
+  BABEL_ENV: 'umd',
+  NODE_ENV: 'development'
+})
+
+console.log('\nBuilding finish-line.min.js ...')
+
+exec('rollup -i src/index.js -c -f umd -o umd/finish-line.min.js', {
+  BABEL_ENV: 'umd',
+  NODE_ENV: 'production'
+})
+
+const size = gzipSize.sync(
+  fs.readFileSync('umd/finish-line.min.js')
+)
+
+console.log('\ngzipped, the UMD build is %s', prettyBytes(size))
