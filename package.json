@@ -1,0 +1,16 @@
+{
+  "name": "finish-line",
+  "version": "0.0.1",
+  "description": "Helpful components and tools to build React and Relay applications more quickly and easily",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "react",
+    "relay",
+    "component"
+  ],
+  "author": "Michael Crismali",
+  "license": "MIT"
+}
