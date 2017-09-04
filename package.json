@@ -12,5 +12,12 @@
     "component"
   ],
   "author": "Michael Crismali",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "hoist-non-react-statics": "^2.3.1",
+    "prop-types": "^15.5.10"
+  },
+  "peerDependencies": {
+    "react": ">=15"
+  }
 }
