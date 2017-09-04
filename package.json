@@ -15,9 +15,28 @@
   "license": "MIT",
   "dependencies": {
     "hoist-non-react-statics": "^2.3.1",
+    "loose-envify": "^1.3.1",
     "prop-types": "^15.5.10"
   },
   "peerDependencies": {
     "react": ">=15"
+  },
+  "browserify": {
+    "transform": [
+      "loose-envify"
+    ]
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-react-remove-prop-types": "^0.4.8",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1",
+    "jest": "^21.0.1",
+    "react": "^15.6.1",
+    "react-addons-test-utils": "^15.6.0",
+    "react-dom": "^15.6.1"
   }
 }
