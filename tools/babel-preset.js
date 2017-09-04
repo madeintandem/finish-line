@@ -1,5 +1,5 @@
 const BABEL_ENV = process.env.BABEL_ENV
-const building = BABEL_ENV != undefined && BABEL_ENV !== 'cjs'
+const building = BABEL_ENV != undefined && BABEL_ENV !== 'cjs' // eslint-disable-line
 
 const plugins = [
   'babel-plugin-transform-class-properties',
