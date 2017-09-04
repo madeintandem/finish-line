@@ -12,6 +12,8 @@
  ],
   "scripts": {
     "build": "node ./tools/build.js",
+    "clean:light": "git clean -fdx . -e node_modules",
+    "clean:hard": "git clean -fdX",
     "test": "jest"
   },
   "keywords": [
