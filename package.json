@@ -21,7 +21,9 @@
     "clean:hard": "git clean -fdX",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
-    "test": "jest"
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "validate": "yarn lint && yarn test"
   },
   "keywords": [
     "react",
@@ -43,9 +45,15 @@
       "loose-envify"
     ]
   },
+  "jest": {
+    "clearMocks": true,
+    "resetModules": true,
+    "rootDir": "src"
+  },
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-eslint": "^7.2.3",
+    "babel-jest": "^21.0.0",
     "babel-plugin-external-helpers": "^6.22.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
