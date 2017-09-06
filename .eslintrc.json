@@ -1,0 +1,8 @@
+{
+  "extends": "standard",
+  "parser": "babel-eslint",
+  "rules": {
+    "object-curly-spacing": ["error", "always"],
+    "standard/object-curly-even-spacing": ["error", "always"]
+  }
+}
