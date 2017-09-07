@@ -1,13 +1,14 @@
 {
-  "extends": "standard",
+  "extends": [
+    "standard",
+    "plugin:react/recommended"
+  ],
   "parser": "babel-eslint",
   "plugins": [
     "react"
   ],
   "rules": {
     "object-curly-spacing": ["error", "always"],
-    "standard/object-curly-even-spacing": ["error", "always"],
-    "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "standard/object-curly-even-spacing": ["error", "always"]
   }
 }
