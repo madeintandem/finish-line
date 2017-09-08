@@ -1,5 +1,20 @@
 /* eslint-env jest */
+import ReactTestRenderer from 'react-test-renderer'
 import ReactShallowRenderer from 'react-test-renderer/shallow'
+
+class DeepWrapper {
+  constructor (jsx) {
+    this._renderer = ReactTestRenderer.create(jsx)
+  }
+
+  instance = () => {
+    return this.renderer().getInstance()
+  }
+
+  renderer = () => {
+    return this._renderer
+  }
+}
 
 class ShallowWrapper {
   constructor (jsx) {
@@ -24,10 +39,15 @@ class ShallowWrapper {
   }
 }
 
+const mount = (jsx) => {
+  return (new DeepWrapper(jsx))
+}
+
 const shallow = (jsx) => {
   return (new ShallowWrapper(jsx))
 }
 
 export {
+  mount,
   shallow
 }
