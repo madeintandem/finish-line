@@ -14,6 +14,10 @@ class DeepWrapper {
   renderer = () => {
     return this._renderer
   }
+
+  toJSON = () => {
+    return this.renderer().toJSON()
+  }
 }
 
 class ShallowWrapper {
@@ -32,6 +36,10 @@ class ShallowWrapper {
 
   state = () => {
     return this.instance().state
+  }
+
+  props = () => {
+    return this.instance().props
   }
 
   rendered = () => {

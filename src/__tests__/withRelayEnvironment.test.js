@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import React from 'react'
+import React, { Component } from 'react'
 import { mount } from 'helpers'
 import { uniqueId } from 'lodash'
 import RelayEnvironmentProvider from '../RelayEnvironmentProvider'
@@ -57,5 +57,18 @@ describe('WrappedComponent', () => {
     const Dummy = () => null
     const wrapped = withRelayEnvironment(Dummy)
     expect(wrapped.WrappedComponent).toEqual(Dummy)
+  })
+})
+
+describe('wrappedComponentRef', () => {
+  it('does not pass the wrapped component ref to the wrapped component', () => {
+    class Dummy extends Component {
+      render () { return <div {...this.props} /> }
+    }
+    const Wrapped = withRelayEnvironment(Dummy)
+    const subject = mount(<RelayEnvironmentProvider environmentProvider={() => 1}>
+      <Wrapped wrappedComponentRef={() => 'hi'} />
+    </RelayEnvironmentProvider>)
+    expect(subject.toJSON()).toMatchSnapshot()
   })
 })
