@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import hoistNonReactStatics from 'hoist-non-react-statics'
-import RelayEnvironmentProvider from './RelayEnvironmentProvider'
+import { RelayEnvironmentProvider } from './RelayEnvironmentProvider'
 
-const withRelayEnvironment = (GivenComponent) => {
+export const withRelayEnvironment = (GivenComponent) => {
   class NewComponent extends Component {
     static propTypes = {
       wrappedComponentRef: PropTypes.func
@@ -23,5 +23,3 @@ const withRelayEnvironment = (GivenComponent) => {
 
   return hoistNonReactStatics(NewComponent, GivenComponent)
 }
-
-export default withRelayEnvironment

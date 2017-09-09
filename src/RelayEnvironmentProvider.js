@@ -1,7 +1,7 @@
 import { Component } from 'react'
 import PropTypes from 'prop-types'
 
-export default class RelayEnvironmentProvider extends Component {
+export class RelayEnvironmentProvider extends Component {
   static propTypes = {
     environmentProvider: PropTypes.func.isRequired,
     children: PropTypes.any.isRequired

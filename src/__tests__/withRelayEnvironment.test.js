@@ -2,8 +2,8 @@
 import React, { Component } from 'react'
 import { mount } from 'helpers'
 import { uniqueId } from 'lodash'
-import RelayEnvironmentProvider from '../RelayEnvironmentProvider'
-import withRelayEnvironment from '../withRelayEnvironment'
+import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
+import { withRelayEnvironment } from '../withRelayEnvironment'
 
 describe('provided props', () => {
   let givenProps

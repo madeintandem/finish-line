@@ -1,1 +1,3 @@
-export { default as RelayEnvironmentProvider } from './RelayEnvironmentProvider'
+export { RelayEnvironmentProvider } from './RelayEnvironmentProvider'
+export { withRelayEnvironment } from './withRelayEnvironment'
+export { RelayRenderer } from './RelayRenderer'

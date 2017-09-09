@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import React from 'react'
-import RelayEnvironmentProvider from '../RelayEnvironmentProvider'
+import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { shallow } from 'helpers'
 import { keys, uniqueId } from 'lodash'
 

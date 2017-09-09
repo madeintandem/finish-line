@@ -2,8 +2,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { mount } from 'helpers'
-import RelayEnvironmentProvider from '../RelayEnvironmentProvider'
-import RelayRenderer from '../RelayRenderer'
+import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
+import { RelayRenderer } from '../RelayRenderer'
 
 jest.mock('react-relay', () => {
   const QueryRenderer = (props) => <div id='mock-query-renderer' {...props} />

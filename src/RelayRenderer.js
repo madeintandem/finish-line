@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { QueryRenderer } from 'react-relay'
 import PropTypes from 'prop-types'
-import withRelayEnvironment from './withRelayEnvironment'
+import { withRelayEnvironment } from './withRelayEnvironment'
 
-class RelayRenderer extends Component {
+class RelayRendererComponent extends Component {
+  static displayName = 'RelayRenderer'
   static propTypes = {
     container: PropTypes.any,
     error: PropTypes.any,
@@ -52,4 +53,4 @@ class RelayRenderer extends Component {
   }
 }
 
-export default withRelayEnvironment(RelayRenderer)
+export const RelayRenderer = withRelayEnvironment(RelayRendererComponent)
