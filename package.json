@@ -5,10 +5,11 @@
   "main": "index.js",
   "module": "es/index.js",
   "files": [
-    "HelloWorld.js",
     "es",
     "index.js",
-    "umd"
+    "RelayEnvironmentProvider.js",
+    "RelayRenderer.js",
+    "withRelayEnvironment.js"
   ],
   "babel": {
     "presets": [
