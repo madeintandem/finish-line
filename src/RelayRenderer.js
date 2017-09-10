@@ -1,19 +1,20 @@
 import React, { Component } from 'react'
 import { QueryRenderer } from 'react-relay'
 import PropTypes from 'prop-types'
-import { withRelayEnvironment } from './withRelayEnvironment'
 
-class RelayRendererComponent extends Component {
-  static displayName = 'RelayRenderer'
+export class RelayRenderer extends Component {
   static propTypes = {
     container: PropTypes.any,
     error: PropTypes.any,
     loading: PropTypes.any,
     query: PropTypes.any.isRequired,
     refreshRelayEnvironment: PropTypes.any,
-    relayEnvironment: PropTypes.any.isRequired,
     render: PropTypes.func,
     variables: PropTypes.object
+  }
+
+  static contextTypes = {
+    relayEnvironment: PropTypes.any.isRequired
   }
 
   render () {
@@ -22,12 +23,11 @@ class RelayRendererComponent extends Component {
       error: ErrorComponent,
       loading: LoadingComponent,
       query,
-      refreshRelayEnvironment: _, // ignoring this
-      relayEnvironment,
       render,
       variables,
       ...otherProps
     } = this.props
+    const { relayEnvironment } = this.context
 
     return <QueryRenderer
       query={query}
@@ -52,5 +52,3 @@ class RelayRendererComponent extends Component {
     />
   }
 }
-
-export const RelayRenderer = withRelayEnvironment(RelayRendererComponent)
