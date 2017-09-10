@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { mount } from 'enzyme'
+import { mount, shallow } from 'enzyme'
 import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { RelayRenderer } from '../RelayRenderer'
 
@@ -10,23 +10,9 @@ jest.mock('react-relay', () => {
   return { QueryRenderer }
 })
 
-class MockRelayEnvironmentProvider extends Component {
-  static propTypes = { children: PropTypes.any }
-  static childContextTypes = RelayEnvironmentProvider.childContextTypes
-
-  getChildContext () {
-    const relayEnvironment = 'relay-environment'
-    const refreshRelayEnvironment = () => null
-    return {
-      relayEnvironment,
-      refreshRelayEnvironment
-    }
-  }
-
-  render () {
-    return this.props.children
-  }
-}
+const mockContext = () => ({
+  relayEnvironment: 'relay-environment'
+})
 
 describe('Basic QueryRenderer props', () => {
   it('passes the appropriate props through to the QueryRenderer', () => {
@@ -35,16 +21,14 @@ describe('Basic QueryRenderer props', () => {
     const LoadingDummy = () => 'loading'
     const renderDummy = () => 'render'
 
-    const subject = mount(<MockRelayEnvironmentProvider>
-      <RelayRenderer
-        container={ContainerDummy}
-        query='query'
-        variables={{ some: 'variables' }}
-        loading={LoadingDummy}
-        error={ErrorDummy}
-        render={renderDummy}
-      />
-    </MockRelayEnvironmentProvider>)
+    const subject = mount(<RelayRenderer
+      container={ContainerDummy}
+      query='query'
+      variables={{ some: 'variables' }}
+      loading={LoadingDummy}
+      error={ErrorDummy}
+      render={renderDummy}
+    />, { context: mockContext() })
     expect(subject).toMatchSnapshot()
   })
 })
@@ -53,15 +37,14 @@ describe('render passed to QueryRenderer', () => {
   const ContainerDummy = () => 'container'
   const ErrorDummy = () => 'error'
   const LoadingDummy = () => 'loading'
+  let subject
 
   const callRender = (props, renderArg) => {
-    const subject = mount(<MockRelayEnvironmentProvider>
-      <RelayRenderer
-        query='query'
-        variables={{ some: 'variables' }}
-        {...props}
-      />
-    </MockRelayEnvironmentProvider>)
+    subject = mount(<RelayRenderer
+      query='query'
+      variables={{ some: 'variables' }}
+      {...props}
+    />, { context: mockContext() })
 
     return subject.find('QueryRenderer').props().render(renderArg)
   }
@@ -92,7 +75,11 @@ describe('render passed to QueryRenderer', () => {
         const aProp = 'a prop'
         const error = 'some error'
         const result = callRender({ error: ErrorDummy, aProp }, { error })
-        expect(result).toEqual(<ErrorDummy error={error} aProp={aProp} />)
+        expect(result).toEqual(<ErrorDummy
+          error={error}
+          aProp={aProp}
+          refreshRenderer={subject.instance().refreshRenderer}
+        />)
       })
     })
 
@@ -117,5 +104,19 @@ describe('render passed to QueryRenderer', () => {
         expect(result).toEqual(<LoadingDummy aProp={aProp} />)
       })
     })
+  })
+})
+
+describe('#refreshRenderer', () => {
+  it('increments the queryRendererKey that is applied to the query renderer', () => {
+    const subject = shallow(<RelayRenderer query='query' />, { context: mockContext() })
+    expect(subject).toHaveState('queryRendererKey', 1)
+    expect(subject.find('QueryRenderer').key()).toEqual('1')
+    subject.instance().refreshRenderer()
+    expect(subject).toHaveState('queryRendererKey', 2)
+    expect(subject.find('QueryRenderer').key()).toEqual('2')
+    subject.instance().refreshRenderer()
+    expect(subject).toHaveState('queryRendererKey', 3)
+    expect(subject.find('QueryRenderer').key()).toEqual('3')
   })
 })

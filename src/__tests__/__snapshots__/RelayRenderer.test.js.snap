@@ -1,11 +1,20 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Basic QueryRenderer props passes the appropriate props through to the QueryRenderer 1`] = `
-<MockRelayEnvironmentProvider>
-  <RelayRenderer
-    container={[Function]}
-    error={[Function]}
-    loading={[Function]}
+<RelayRenderer
+  container={[Function]}
+  error={[Function]}
+  loading={[Function]}
+  query="query"
+  render={[Function]}
+  variables={
+    Object {
+      "some": "variables",
+    }
+  }
+>
+  <QueryRenderer
+    environment="relay-environment"
     query="query"
     render={[Function]}
     variables={
@@ -13,17 +22,6 @@ exports[`Basic QueryRenderer props passes the appropriate props through to the Q
         "some": "variables",
       }
     }
-  >
-    <QueryRenderer
-      environment="relay-environment"
-      query="query"
-      render={[Function]}
-      variables={
-        Object {
-          "some": "variables",
-        }
-      }
-    />
-  </RelayRenderer>
-</MockRelayEnvironmentProvider>
+  />
+</RelayRenderer>
 `;

@@ -17,6 +17,14 @@ export class RelayRenderer extends Component {
     relayEnvironment: PropTypes.any.isRequired
   }
 
+  state = {
+    queryRendererKey: 1
+  }
+
+  refreshRenderer = () => {
+    this.setState({ queryRendererKey: this.state.queryRendererKey + 1 })
+  }
+
   render () {
     const {
       container: Container,
@@ -30,6 +38,7 @@ export class RelayRenderer extends Component {
     const { relayEnvironment } = this.context
 
     return <QueryRenderer
+      key={this.state.queryRendererKey}
       query={query}
       environment={relayEnvironment}
       variables={variables}
@@ -38,7 +47,7 @@ export class RelayRenderer extends Component {
           const combinedProps = { ...otherProps, ...props }
           return render({ error, props: combinedProps })
         } else if (error && ErrorComponent) {
-          return <ErrorComponent error={error} {...otherProps} />
+          return <ErrorComponent error={error} refreshRenderer={this.refreshRenderer} {...otherProps} />
         } else if (error) {
           return null
         } else if (props) {
