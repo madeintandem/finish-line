@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import React from 'react'
 import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
-import { shallow } from 'helpers'
+import { shallow } from 'enzyme'
 import { keys, uniqueId } from 'lodash'
 
 let subject
@@ -10,9 +10,11 @@ beforeEach(() => {
   subject = null
 })
 
+const Dummy = () => null
+
 const loadSubject = (props) => {
   subject = shallow(<RelayEnvironmentProvider {...props}>
-    <div id='some-child' />
+    <Dummy />
   </RelayEnvironmentProvider>)
 }
 
@@ -76,6 +78,6 @@ describe('#refreshEnvironment', () => {
 describe('#render', () => {
   it('is the children', () => {
     loadSubject({ environmentProvider: uniqueId })
-    expect(subject.rendered()).toEqual(<div id='some-child' />)
+    expect(subject.instance().render()).toEqual(<Dummy />)
   })
 })

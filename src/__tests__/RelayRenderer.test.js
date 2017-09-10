@@ -1,12 +1,12 @@
 /* eslint-env jest */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { mount } from 'helpers'
+import { mount } from 'enzyme'
 import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { RelayRenderer } from '../RelayRenderer'
 
 jest.mock('react-relay', () => {
-  const QueryRenderer = (props) => <div id='mock-query-renderer' {...props} />
+  const QueryRenderer = (props) => null
   return { QueryRenderer }
 })
 
@@ -45,7 +45,7 @@ describe('Basic QueryRenderer props', () => {
         render={renderDummy}
       />
     </MockRelayEnvironmentProvider>)
-    expect(subject.toJSON()).toMatchSnapshot()
+    expect(subject).toMatchSnapshot()
   })
 })
 
@@ -63,7 +63,7 @@ describe('render passed to QueryRenderer', () => {
       />
     </MockRelayEnvironmentProvider>)
 
-    return subject.toJSON().props.render(renderArg)
+    return subject.find('QueryRenderer').props().render(renderArg)
   }
 
   describe('render function given', () => {

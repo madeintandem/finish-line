@@ -1,8 +1,16 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`wrappedComponentRef does not pass the wrapped component ref to the wrapped component 1`] = `
-<div
-  refreshRelayEnvironment={[Function]}
-  relayEnvironment={1}
-/>
+<RelayEnvironmentProvider
+  environmentProvider={[Function]}
+>
+  <withRelayEnvironment(Dummy)
+    wrappedComponentRef={[Function]}
+  >
+    <Dummy
+      refreshRelayEnvironment={[Function]}
+      relayEnvironment={1}
+    />
+  </withRelayEnvironment(Dummy)>
+</RelayEnvironmentProvider>
 `;

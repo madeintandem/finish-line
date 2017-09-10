@@ -1,6 +1,6 @@
 /* eslint-env jest */
 import React, { Component } from 'react'
-import { mount } from 'helpers'
+import { mount } from 'enzyme'
 import { uniqueId } from 'lodash'
 import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { withRelayEnvironment } from '../withRelayEnvironment'
@@ -63,12 +63,12 @@ describe('WrappedComponent', () => {
 describe('wrappedComponentRef', () => {
   it('does not pass the wrapped component ref to the wrapped component', () => {
     class Dummy extends Component {
-      render () { return <div {...this.props} /> }
+      render () { return null }
     }
     const Wrapped = withRelayEnvironment(Dummy)
     const subject = mount(<RelayEnvironmentProvider environmentProvider={() => 1}>
       <Wrapped wrappedComponentRef={() => 'hi'} />
     </RelayEnvironmentProvider>)
-    expect(subject.toJSON()).toMatchSnapshot()
+    expect(subject).toMatchSnapshot()
   })
 })
