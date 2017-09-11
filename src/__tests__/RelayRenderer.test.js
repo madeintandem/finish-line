@@ -1,8 +1,6 @@
 /* eslint-env jest */
-import React, { Component } from 'react'
-import PropTypes from 'prop-types'
+import React from 'react'
 import { mount, shallow } from 'enzyme'
-import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { RelayRenderer } from '../RelayRenderer'
 
 jest.mock('react-relay', () => {
