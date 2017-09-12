@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import values from 'lodash.values'
 import { RelayRenderer } from './RelayRenderer'
 import { RelayEnvironmentProvider } from './RelayEnvironmentProvider'
 
 export const relayRendererFactory = (environmentProvider) => {
   let currentEnvironment = environmentProvider()
   let id = 1
-  const customRendererCache = {}
+  const customRendererCache = new Map()
 
   const refreshRelayEnvironment = () => {
     currentEnvironment = environmentProvider()
-    values(customRendererCache).forEach(callback => callback(currentEnvironment))
+    customRendererCache.forEach((callback, _key) => callback(currentEnvironment))
   }
 
   class CustomRelayRenderer extends Component {
@@ -32,11 +31,11 @@ export const relayRendererFactory = (environmentProvider) => {
     }
 
     componentWillMount () {
-      customRendererCache[this.customRelayRendererId] = this.setNewEnvironment
+      customRendererCache.set(this.customRelayRendererId, this.setNewEnvironment)
     }
 
     componentWillUnmount () {
-      delete customRendererCache[this.customRelayRendererId]
+      customRendererCache.delete(this.customRelayRendererId)
     }
 
     setNewEnvironment = (relayEnvironment) => {
