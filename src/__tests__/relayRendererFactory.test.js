@@ -2,7 +2,13 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import { uniqueId } from 'lodash'
+import { commitMutation } from 'react-relay'
 import { relayRendererFactory } from '../relayRendererFactory'
+
+jest.mock('react-relay', () => {
+  const commitMutation = jest.fn()
+  return { commitMutation }
+})
 
 describe('initial state', () => {
   it('is the current environment', () => {
@@ -63,6 +69,29 @@ describe('#getChildContext', () => {
   it('has the refresh relay environment function', () => {
     expect(result.refreshRelayEnvironment).toBeInstanceOf(Function)
     expect(result.refreshRelayEnvironment.name).toEqual('refreshRelayEnvironment')
+  })
+
+  it('has the commit mutation function', () => {
+    expect(result.commitMutation).toBeInstanceOf(Function)
+    expect(result.commitMutation.name).toEqual('wrappedCommitMutation')
+  })
+})
+
+describe('#commitMutation', () => {
+  it('commits the mutation with the current environment and passes arguments through', () => {
+    let count = 1
+    const counter = () => count++
+    const arg = { some: 'thing' }
+    const anotherArg = { some: 'other thing' }
+    const CustomRelayRenderer = relayRendererFactory(counter)
+    const subject = shallow(<CustomRelayRenderer query='query' />)
+
+    subject.instance().getChildContext().commitMutation(arg)
+    expect(commitMutation).toHaveBeenCalledWith(1, arg)
+
+    subject.instance().getChildContext().refreshRelayEnvironment()
+    subject.instance().getChildContext().commitMutation(anotherArg)
+    expect(commitMutation).toHaveBeenCalledWith(2, anotherArg)
   })
 })
 

@@ -1,8 +1,14 @@
 /* eslint-env jest */
 import React from 'react'
-import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { shallow } from 'enzyme'
 import { keys, uniqueId } from 'lodash'
+import { commitMutation } from 'react-relay'
+import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
+
+jest.mock('react-relay', () => {
+  const commitMutation = jest.fn()
+  return { commitMutation }
+})
 
 let subject
 
@@ -48,8 +54,22 @@ describe('#getChildContext', () => {
     expect(result.refreshRelayEnvironment).toEqual(subject.instance().refreshEnvironment)
   })
 
-  it('is only the environment and refreshRelayEnvironment', () => {
-    expect(keys(result)).toEqual(['relayEnvironment', 'refreshRelayEnvironment'])
+  it('has commitMutation', () => {
+    expect(result.commitMutation).toEqual(subject.instance().commitMutation)
+  })
+
+  it('is only the environment, refreshRelayEnvironment, and commitMutation', () => {
+    expect(keys(result)).toEqual(['commitMutation', 'relayEnvironment', 'refreshRelayEnvironment'])
+  })
+})
+
+describe('#commitMutation', () => {
+  it('calls commitMutation from relay with the environment passing through other arguments', () => {
+    const environment = 'some environment'
+    const arg = { some: 'mutation', config: 'stuff' }
+    loadSubject({ environmentProvider: () => environment })
+    subject.instance().commitMutation(arg)
+    expect(commitMutation).toHaveBeenCalledWith(environment, arg)
   })
 })
 
