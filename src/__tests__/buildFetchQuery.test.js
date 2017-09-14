@@ -21,7 +21,7 @@ describe('buildFetchQuery', () => {
 
     expect(fetch).toHaveBeenCalledWith('/graphql', {
       method: 'POST',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, variables })
     })
   })
@@ -42,7 +42,7 @@ describe('buildFetchQuery', () => {
     expect(fetch).toHaveBeenCalledWith(expect.anything(), {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
         other: 'headers'
       },
       body: JSON.stringify({ query, variables })

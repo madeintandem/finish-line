@@ -3,7 +3,7 @@ export const buildFetchQuery = ({ path, headers } = {}) => {
     return fetch(path || '/graphql', {
       method: 'POST',
       headers: {
-        'content-type': 'application/json',
+        'Content-Type': 'application/json',
         ...(headers || {})
       },
       body: JSON.stringify({
