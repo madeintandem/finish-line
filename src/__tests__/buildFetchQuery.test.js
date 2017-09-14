@@ -26,6 +26,22 @@ describe('buildFetchQuery', () => {
     })
   })
 
+  it('calls fetch properly with uploadables (form data request)', () => {
+    const uploadables = { maybe: 'a png' }
+    const formData = new FormData()
+    formData.append('query', operation.text)
+    formData.append('variables', JSON.stringify(variables))
+    formData.append('maybe', 'a png')
+    const subject = buildFetchQuery()
+    subject(operation, variables, { cache: 'config' }, uploadables)
+
+    expect(fetch).toHaveBeenCalledWith(expect.anything(), {
+      method: 'POST',
+      headers: {},
+      body: formData
+    })
+  })
+
   it('accepts a path', () => {
     const path = '/some-other-path'
     const subject = buildFetchQuery({ path })

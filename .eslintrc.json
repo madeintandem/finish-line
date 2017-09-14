@@ -8,7 +8,8 @@
     "react"
   ],
   "globals": {
-    "fetch": false
+    "fetch": false,
+    "FormData": false
   },
   "rules": {
     "object-curly-spacing": ["error", "always"],
