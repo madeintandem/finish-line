@@ -7,6 +7,9 @@
   "plugins": [
     "react"
   ],
+  "globals": {
+    "fetch": false
+  },
   "rules": {
     "object-curly-spacing": ["error", "always"],
     "standard/object-curly-even-spacing": ["error", "always"]
