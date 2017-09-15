@@ -29,3 +29,7 @@ Or via NPM:
 ### `relayRendererFactory`
 
 ### `withRelayEnvironment`
+
+## License
+
+[MIT](LICENSE.txt)
