@@ -5,7 +5,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "files": [
-    "buildEnvironment",
+    "buildEnvironment.js",
     "buildFetchQuery",
     "es",
     "index.js",
