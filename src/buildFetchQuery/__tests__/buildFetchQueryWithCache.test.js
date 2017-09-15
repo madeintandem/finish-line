@@ -1,16 +1,16 @@
 /* eslint-env jest */
 import { QueryResponseCache } from 'relay-runtime'
 import { buildFetchQueryWithCache } from '../buildFetchQueryWithCache'
-import { buildFetchQuery } from '../buildFetchQuery'
+import { buildFetchQueryBase } from '../buildFetchQueryBase'
 
-jest.mock('../buildFetchQuery', () => {
+jest.mock('../buildFetchQueryBase', () => {
   const {
-    buildFetchQuery: buildFetchQueryOriginal
-  } = require.requireActual('../buildFetchQuery')
+    buildFetchQueryBase: buildFetchQueryBaseOriginal
+  } = require.requireActual('../buildFetchQueryBase')
 
-  const buildFetchQuery = jest.fn(buildFetchQueryOriginal)
+  const buildFetchQueryBase = jest.fn(buildFetchQueryBaseOriginal)
 
-  return { buildFetchQuery }
+  return { buildFetchQueryBase }
 })
 
 let cache
@@ -28,11 +28,11 @@ beforeEach(() => {
   variables = { some: 'variables' }
 })
 
-it('passes through non-cache options to buildFetchQuery', () => {
+it('passes through non-cache options to buildFetchQueryBase', () => {
   const path = '/some-path'
   const headers = { some: 'headers' }
   buildFetchQueryWithCache({ cache, path, headers })
-  expect(buildFetchQuery).toHaveBeenCalledWith({ path, headers })
+  expect(buildFetchQueryBase).toHaveBeenCalledWith({ path, headers })
 })
 
 it('clears the cache when executing a mutation', () => {

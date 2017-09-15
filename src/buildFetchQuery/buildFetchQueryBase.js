@@ -25,7 +25,7 @@ const buildBody = (query, variables, uploadables) => {
   }
 }
 
-export const buildFetchQuery = ({ path, headers } = {}) => {
+export const buildFetchQueryBase = ({ path, headers } = {}) => {
   const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
     return fetch(path || '/graphql', {
       method: 'POST',
