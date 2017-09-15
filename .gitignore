@@ -8,3 +8,4 @@ es
 umd
 /*.js
 !rollup.config.js
+buildFetchQuery/

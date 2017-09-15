@@ -1,3 +1,4 @@
+export { buildEnvironment } from './buildEnvironment'
 export { buildFetchQuery } from './buildFetchQuery'
 export { RelayEnvironmentProvider } from './RelayEnvironmentProvider'
 export { RelayRenderer } from './RelayRenderer'
