@@ -122,6 +122,43 @@ const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 
 ### `RelayRenderer`
 
+`RelayRenderer` is Relay's `QueryRenderer` wrapped up for convenience. You don't need to pass it a Relay `Environment` since it pulls it from `context`, therefore it should always be rendered as a child of `RelayEnvironmentProvider` (it does not need to be a direct child). It accepts the following `props`:
+
+- `container` - A Relay Container or some other component to pass data from the graphql `query` to. It also receives all additional `props` provided to the `RelayRenderer` that are not listed here.
+- `error` - A component to render in the event of an error. It receives the `error` object and a `refreshRenderer` function as `props` along with all additional `props` provided to the `RelayRenderer` that are not listed here.
+- `loading` - A component to render while Relay fetches data. It receives all additional `props` provided to the `RelayRenderer` that are not listed here.
+- `query` - A Relay `graphql` object.
+- `render` - Works the same as `QueryRenderer`'s `render` `prop`, but is called with all of the `props` passed to the `RelayRenderer` along with whatever `props` Relay provides. If passed, the `error` and `loading` props are ignored.
+- `variables` - Variables for your `query`.
+
+```js
+import { graphql } from 'react-relay'
+import { RelayRenderer } from 'finish-line'
+import { MyContainer } from './MyContainer'
+
+const TryAgain = ({error, refreshRenderer}) => (
+  <div>
+    <h4>Something went wrong!</h4>
+    <span>{error.message}</span>
+    <button onPress={refreshRenderer}>Try Again?</button>
+  </div>
+)
+
+const Loading = (props) => (
+  <div>Loading...</div>
+)
+
+// ...
+
+<RelayRenderer
+  query={graphql`query { get { some { data } } }`}
+  error={TryAgain}
+  loading={Loading}
+  container={MyContainer}
+/>
+
+```
+
 ### `relayRendererFactory`
 
 ### `withRelayEnvironment`
