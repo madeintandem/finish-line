@@ -125,8 +125,8 @@ const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 `RelayRenderer` is Relay's `QueryRenderer` wrapped up for convenience. You don't need to pass it a Relay `Environment` since it pulls it from `context`, therefore it should always be rendered as a child of `RelayEnvironmentProvider` (it does not need to be a direct child). It accepts the following `props`:
 
 - `container` - A Relay Container or some other component to pass data from the graphql `query` to. It also receives all additional `props` provided to the `RelayRenderer` that are not listed here.
-- `error` - A component to render in the event of an error. It receives the `error` object and a `refreshRenderer` function as `props` along with all additional `props` provided to the `RelayRenderer` that are not listed here.
-- `loading` - A component to render while Relay fetches data. It receives all additional `props` provided to the `RelayRenderer` that are not listed here.
+- `error` - A component to render in the event of an error. It receives the `error` object and a `refreshRenderer` function as `props` along with all additional `props` provided to the `RelayRenderer` that are not listed here. When not provided it renders `null` when there's an error.
+- `loading` - A component to render while Relay fetches data. It receives all additional `props` provided to the `RelayRenderer` that are not listed here. When not provided it renders `null` during loading.
 - `query` - A Relay `graphql` object.
 - `render` - Works the same as `QueryRenderer`'s `render` `prop`, but is called with all of the `props` passed to the `RelayRenderer` along with whatever `props` Relay provides. If passed, the `error` and `loading` props are ignored.
 - `variables` - Variables for your `query`.
@@ -161,7 +161,7 @@ const Loading = (props) => (
 
 ### `relayRendererFactory`
 
-Creates a component that behaves like `RelayRenderer` but does not need to be rendered inside a `RelayEnvironmentProvider`. All instances of the created component class will share the same environment and stay in sync with one another. `withRelayEnvironment` will work as it normally does for all `children` of your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`.
+Creates a component that behaves like `RelayRenderer` but does not need to be rendered inside a `RelayEnvironmentProvider`. All instances of the created component class will share the same environment and stay in sync with one another. `withRelayEnvironment` will work as it normally does for anything rendered by your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`.
 
 ```js
 import { relayRendererFactory, buildEnvironment, withRelayEnvironment } from 'finish-line'
@@ -175,14 +175,9 @@ const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
 // ...
 
 <div>
-  <CustomRelayRenderer {/* ... */}>
-    <MyComponentWithRelayEnvironment />
-    <MyComponentWithRelayEnvironment />
-  </CustomRelayRenderer>
+  <CustomRelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
   <br />
-  <CustomRelayRenderer {/* ... */}>
-    <MyComponentWithRelayEnvironment />
-  </CustomRelayRenderer>
+  <CustomRelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
 </div>
 ```
 
