@@ -97,6 +97,29 @@ const network = Network.create(fetchQuery)
 
 ### `RelayEnvironmentProvider`
 
+A component that helps manage your application's Relay `Environment`. It takes an `environmentProvider` `prop` which is a function that returns a new instance of a Relay `Environment`. It provides a few pieces of helper `context` that you can access through Finish Line's `withRelayEnvironment` helper (check out its documentation for more). Finish Line's `RelayRenderer` must be rendered inside of `RelayEnvironmentProvider` or something that provides similar `context`.
+
+```js
+import {
+  RelayEnvironmentProvider,
+  RelayRenderer,
+  buildEnvironment,
+  withRelayEnvironment
+} from 'finish-line'
+import { MyComponent } from './MyComponent'
+
+const headers = { Authorization: 'Bearer 1234567890' }
+const newAppEnvironment = () => buildEnvironment({ headers })
+const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
+
+// ...
+
+<RelayEnvironmentProvider environmentProvider={newAppEnvironment}>
+  <MyComponentWithRelayEnvironment />
+  <RelayRenderer {/* ... */} />
+</RelayEnvironmentProvider>
+```
+
 ### `RelayRenderer`
 
 ### `relayRendererFactory`
