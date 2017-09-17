@@ -9,3 +9,4 @@ umd
 /*.js
 !rollup.config.js
 buildFetchQuery/
+!src/buildFetchQuery/
