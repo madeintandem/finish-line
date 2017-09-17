@@ -18,6 +18,8 @@ Or via NPM:
 
 ## Usage
 
+## API
+
 ### `buildEnvironment`
 
 Builds a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) that you can you can pass to Relay's `QueryRenderer`, `commitMutation`, etc. It can also be passed to Finish Line's `RelayRenderer` and `relayRendererFactory`.
@@ -69,6 +71,29 @@ const environment = buildEnvironment(fetchQuery)
 ```
 
 ### `buildFetchQuery`
+
+Creates a function that you can pass to Relay's `Network.create` to fetch your data. Posts JSON unless uploadables are present, in which case it posts `FormData`. It can be called with no arguments or with a config object with some or all of the following:
+
+- `path` - A string of where to query data from. Defaults to `'/graphql'`
+- `headers` - An object containing whatever headers you need to send to the server. Adds `'Content-Type': 'application/json'` when applicable.
+- `cache` - A `QueryResponseCache` from `'relay-runtime'` (or something with the same interface). Clears the cache whenever a mutation is sent and caches all requests that don't have errors.
+
+```js
+import { QueryResponseCache, Network } from 'relay-runtime'
+import { buildFetchQuery } from 'finish-line'
+
+const fetchQuery = buildFetchQuery()
+const network = Network.create(fetchQuery)
+
+// or with all options
+
+const path = 'https://example.org/graphql'
+const headers = { Authorization: 'Bearer 1234567890' }
+const cache = new QueryResponseCache({ size: 250, ttl: 5 * 60 * 1000 }) // 5 minute cache
+
+const fetchQuery = buildFetchQuery({ path, headers, cache})
+const network = Network.create(fetchQuery)
+```
 
 ### `RelayEnvironmentProvider`
 
