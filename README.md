@@ -161,6 +161,31 @@ const Loading = (props) => (
 
 ### `relayRendererFactory`
 
+Creates a component that behaves like `RelayRenderer` but does not need to be rendered inside a `RelayEnvironmentProvider`. All instances of the created component class will share the same environment and stay in sync with one another. `withRelayEnvironment` will work as it normally does for all `children` of your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`.
+
+```js
+import { relayRendererFactory, buildEnvironment, withRelayEnvironment } from 'finish-line'
+import { MyComponent } from './MyComponent'
+
+const headers = { Authorization: 'Bearer 1234567890' }
+const newAppEnvironment = () => buildEnvironment({ headers })
+const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
+
+const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
+// ...
+
+<div>
+  <CustomRelayRenderer {/* ... */}>
+    <MyComponentWithRelayEnvironment />
+    <MyComponentWithRelayEnvironment />
+  </CustomRelayRenderer>
+  <br />
+  <CustomRelayRenderer {/* ... */}>
+    <MyComponentWithRelayEnvironment />
+  </CustomRelayRenderer>
+</div>
+```
+
 ### `withRelayEnvironment`
 
 ## License
