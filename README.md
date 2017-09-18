@@ -2,6 +2,13 @@
 
 Handy components and functions to cut down on some of the boiler plate in Relay Modern apps.
 
+## Contents
+
+- [Installation](#installation)
+- [Usage](#usage)
+- [API](#api)
+- [License](#license)
+
 ## Installation
 
 Via Yarn:
