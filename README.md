@@ -6,7 +6,7 @@ Handy components and functions to cut down on some of the boiler plate in Relay 
 
 - [Installation](#installation)
 - [Usage](#usage)
-  - [`RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`](#relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
+  - [`RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?](#relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 - [API](#api)
   - [`buildEnvironment`](#buildenvironment)
   - [`buildFetchQuery`](#buildfetchquery)
