@@ -185,7 +185,7 @@ Creates a function that you can pass to Relay's [`Network.create`](https://faceb
 
 - `path` - A string of where to query data from. Defaults to `'/graphql'`
 - `headers` - An object containing whatever headers you need to send to the server. Adds `'Content-Type': 'application/json'` when applicable.
-- `cache` - A `QueryResponseCache` from `'relay-runtime'` (or something with the same interface). Clears the cache whenever a mutation is sent and caches all requests that don't have errors.
+- `cache` - A [`QueryResponseCache`](https://github.com/facebook/relay/commit/00c7e90b4b928607c4db43cf02161e29e6df3800) from `'relay-runtime'` (or something with the same interface). Clears the cache whenever a mutation is sent and caches all requests that don't have errors.
 
 ```js
 import { QueryResponseCache, Network } from 'relay-runtime'
@@ -231,9 +231,9 @@ const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 
 ### `RelayRenderer`
 
-`RelayRenderer` is Relay's `QueryRenderer` wrapped up for convenience. You don't need to pass it a Relay `Environment` since it pulls it from `context`, therefore it should always be rendered as a child of `RelayEnvironmentProvider` (it does not need to be a direct child). It accepts the following `props`:
+`RelayRenderer` is Relay's [`QueryRenderer`](https://facebook.github.io/relay/docs/query-renderer.html) wrapped up for convenience. You don't need to pass it a Relay [`Environment`](https://facebook.github.io/relay/docs/relay-environment.html) since it pulls it from [`context`](https://facebook.github.io/react/docs/context.html), therefore it should always be rendered as a child of [`RelayEnvironmentProvider`](#relayenvironmentprovider) (it does not need to be a direct child). It accepts the following `props`:
 
-- `container` - A Relay Container or some other component to pass data from the graphql `query` to. It also receives all additional `props` provided to the `RelayRenderer` that are not listed here.
+- `container` - A Relay [Container](https://facebook.github.io/relay/docs/fragment-container.html) or some other component to pass data from the graphql `query` to. It also receives all additional `props` provided to the `RelayRenderer` that are not listed here.
 - `error` - A component to render in the event of an error. It receives the `error` object and a `refreshRenderer` function as `props` along with all additional `props` provided to the `RelayRenderer` that are not listed here. When not provided it renders `null` when there's an error.
 - `loading` - A component to render while Relay fetches data. It receives all additional `props` provided to the `RelayRenderer` that are not listed here. When not provided it renders `null` during loading.
 - `query` - A Relay `graphql` object.
@@ -272,7 +272,7 @@ const Loading = (props) => (
 
 ### `relayRendererFactory`
 
-Creates a component that behaves like `RelayRenderer` but does not need to be rendered inside a `RelayEnvironmentProvider`. All instances of the created component class will share the same environment and stay in sync with one another. `withRelayEnvironment` will work as it normally does for anything rendered by your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
+Creates a component that behaves like [`RelayRenderer`](#relayrenderer) but does not need to be rendered inside a [`RelayEnvironmentProvider`](#relayenvironmentprovider). All instances of the created component class will share the same environment and stay in sync with one another. [`withRelayEnvironment`](#withrelayenvironment) will work as it normally does for anything rendered by your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 
 ```js
 import { relayRendererFactory, buildEnvironment, withRelayEnvironment } from 'finish-line'
@@ -296,11 +296,11 @@ const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
 
 Wraps your components to provides the following `props`:
 
-- `commitMutation` - Relay's `commitMutation` function wrapped up so you don't have to pass the `environment` in.
-- `relayEnvironment` - The current instance of Relay's `environment`. This comes from the `environmentProvider` that was given to `RelayEnvironmentProvider` or `relayRendererFactory`. Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
+- `commitMutation` - Relay's [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html) function wrapped up so you don't have to pass the `environment` in.
+- `relayEnvironment` - The current instance of Relay's [`environment`](https://facebook.github.io/relay/docs/relay-environment.html). This comes from the `environmentProvider` that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory). Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
 - `refreshRelayEnvironment` - A function that will call the `environmentProvider` to replace the current `environment`. This is handy when someone signs in or out of your application. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result. If called by a component rendered by a custom `RelayRenderer` (via `relayRendererFactory`), all custom `RelayRenderer`s that are rendered will update.
 
-It accepts a `wrappedComponentRef` `prop` that will provide a `ref` of the wrapped component when rendered.
+It accepts a `wrappedComponentRef` `prop` that will provide a [`ref`](https://facebook.github.io/react/docs/refs-and-the-dom.html) of the wrapped component when rendered.
 
 Also, all `static` functions on the wrapped component are hoisted up to the wrapper for convenience.
 
