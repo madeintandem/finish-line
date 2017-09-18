@@ -18,6 +18,46 @@ Or via NPM:
 
 ## Usage
 
+Here are a few examples. Check out the API for more specifics.
+
+```js
+import { graphql } from 'react-relay'
+import {
+  RelayRenderer,
+  RelayEnvironmentProvider,
+  withRelayEnvironment,
+  buildEnvironment
+} from 'finish-line'
+
+const MyComponent = ({ somethingFromQuery }) => (
+  <span>{somethingFromQuery}</span>
+)
+
+const Buttons = withRelayEnvironment(({ commitMutation, refreshRelayEnvironment }) => (
+  <div>
+    <button onClick={() => commitMutation({ mutationExample: 'config' })}>
+      Mutate!
+    </button>
+
+    <button onClick={refreshRelayEnvironment}>
+      Reset!
+    </button>
+  </div>
+))
+
+const query = graphql`query { somethingFromQuery }`
+
+const App = () => (
+  <RelayEnvironmentProvider environmentProvider={buildEnvironment}>
+    <div>
+      <h2>Some examples!</h2>
+      <RelayRenderer query={query} container={MyComponent} />
+      <Buttons />
+    </div>
+  </RelayEnvironmentProvider>
+)
+```
+
 ### `RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?
 
 It depends. `RelayEnvironmentProvider` with `RelayRenderer` is a much easier to understand (just wrap your app with `RelayEnvironmentProvider` and use `RelayRenderer` at will), but whenever you `refreshRelayEnvironment` your entire component tree will update. This can make other React patterns tricky, for instance this update could trigger transition animations for navigating between routes React Router v4.
