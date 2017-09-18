@@ -1,4 +1,4 @@
-# finish-line
+# Finish Line
 
 Handy components and functions to cut down on some of the boiler plate in Relay Modern apps.
 
