@@ -7,6 +7,12 @@ Handy components and functions to cut down on some of the boiler plate in Relay 
 - [Installation](#installation)
 - [Usage](#usage)
 - [API](#api)
+  - [`buildEnvironment`](#buildenvironment)
+  - [`buildFetchQuery`](#buildfetchquery)
+  - [`RelayEnvironmentProvider`](#relayenvironmentprovider)
+  - [`RelayRenderer`](#relayrenderer)
+  - [`relayRendererFactory`](#relayrendererfactory)
+  - [`withRelayEnvironment`](#withrelayenvironment)
 - [License](#license)
 
 ## Installation
@@ -114,6 +120,13 @@ const App = () => (
 ```
 
 ## API
+
+- [`buildEnvironment`](#buildenvironment)
+- [`buildFetchQuery`](#buildfetchquery)
+- [`RelayEnvironmentProvider`](#relayenvironmentprovider)
+- [`RelayRenderer`](#relayrenderer)
+- [`relayRendererFactory`](#relayrendererfactory)
+- [`withRelayEnvironment`](#withrelayenvironment)
 
 ### `buildEnvironment`
 
