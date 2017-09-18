@@ -6,6 +6,7 @@ Handy components and functions to cut down on some of the boiler plate in Relay 
 
 - [Installation](#installation)
 - [Usage](#usage)
+  - [`RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`](#relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 - [API](#api)
   - [`buildEnvironment`](#buildenvironment)
   - [`buildFetchQuery`](#buildfetchquery)
@@ -205,7 +206,7 @@ const network = Network.create(fetchQuery)
 
 ### `RelayEnvironmentProvider`
 
-A component that helps manage your application's Relay `Environment`. It takes an `environmentProvider` `prop` which is a function that returns a new instance of a Relay `Environment`. It provides a few pieces of helper `context` that you can access through Finish Line's `withRelayEnvironment` helper (check out its documentation for more). Finish Line's `RelayRenderer` must be rendered inside of `RelayEnvironmentProvider` or something that provides similar `context`.
+A component that helps manage your application's Relay `Environment`. It takes an `environmentProvider` `prop` which is a function that returns a new instance of a Relay `Environment`. It provides a few pieces of helper `context` that you can access through Finish Line's `withRelayEnvironment` helper (check out its documentation for more). Finish Line's `RelayRenderer` must be rendered inside of `RelayEnvironmentProvider` or something that provides similar `context`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 
 ```js
 import {
@@ -239,6 +240,8 @@ const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 - `render` - Works the same as `QueryRenderer`'s `render` `prop`, but is called with all of the `props` passed to the `RelayRenderer` along with whatever `props` Relay provides. If passed, the `error` and `loading` props are ignored.
 - `variables` - Variables for your `query`.
 
+ [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
+
 ```js
 import { graphql } from 'react-relay'
 import { RelayRenderer } from 'finish-line'
@@ -269,7 +272,7 @@ const Loading = (props) => (
 
 ### `relayRendererFactory`
 
-Creates a component that behaves like `RelayRenderer` but does not need to be rendered inside a `RelayEnvironmentProvider`. All instances of the created component class will share the same environment and stay in sync with one another. `withRelayEnvironment` will work as it normally does for anything rendered by your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`.
+Creates a component that behaves like `RelayRenderer` but does not need to be rendered inside a `RelayEnvironmentProvider`. All instances of the created component class will share the same environment and stay in sync with one another. `withRelayEnvironment` will work as it normally does for anything rendered by your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 
 ```js
 import { relayRendererFactory, buildEnvironment, withRelayEnvironment } from 'finish-line'
