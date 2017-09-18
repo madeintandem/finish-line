@@ -183,6 +183,41 @@ const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
 
 ### `withRelayEnvironment`
 
+Wraps your components to provides the following `props`:
+
+- `commitMutation` - Relay's `commitMutation` function wrapped up so you don't have to pass the `environment` in.
+- `relayEnvironment` - The current instance of Relay's `environment`. This comes from the `environmentProvider` that was given to `RelayEnvironmentProvider` or `relayRendererFactory`. Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
+- `refreshRelayEnvironment` - A function that will call the `environmentProvider` to replace the current `environment`. This is handy when someone signs in or out of your application. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result. If called by a component rendered by a custom `RelayRenderer` (via `relayRendererFactory`), all custom `RelayRenderer`s that are rendered will update.
+
+It accepts a `wrappedComponentRef` `prop` that will provide a `ref` of the wrapped component when rendered.
+
+Also, all `static` functions on the wrapped component are hoisted up to the wrapper for convenience.
+
+```js
+import {
+  withRelayEnvironment,
+  RelayEnvironmentProvider,
+  relayRendererFactory
+} from 'finish-line'
+import { MyComponent } from './MyComponent'
+
+const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
+
+const headers = { Authorization: 'Bearer 1234567890' }
+const newAppEnvironment = () => buildEnvironment({ headers })
+const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
+
+// ...
+
+<div>
+  <RelayEnvironmentProvider environmentProvider={newAppEnvironment}>
+    <RelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
+  </RelayEnvironmentProvider>
+  <br />
+  <CustomRelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
+</div>
+```
+
 ## License
 
 [MIT](LICENSE.txt)
