@@ -18,13 +18,13 @@ Handy components and functions to cut down on some of the boiler plate in Relay 
 
 ## Installation
 
-Via Yarn:
+Via [Yarn](https://yarnpkg.com/en/):
 
 ```sh
   yarn add finish-line
 ```
 
-Or via NPM:
+Or via [NPM](https://www.npmjs.com/):
 
 ```sh
   npm install --save finish-line
@@ -32,7 +32,7 @@ Or via NPM:
 
 ## Usage
 
-Here are a few examples. Check out the API for more specifics.
+Here are a few examples. Check out the [API](#api) for more specifics.
 
 ```js
 import { graphql } from 'react-relay'
@@ -74,7 +74,7 @@ const App = () => (
 
 ### `RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?
 
-It depends. `RelayEnvironmentProvider` with `RelayRenderer` is a much easier to understand (just wrap your app with `RelayEnvironmentProvider` and use `RelayRenderer` at will), but whenever you `refreshRelayEnvironment` your entire component tree will update. This can make other React patterns tricky, for instance this update could trigger transition animations for navigating between routes React Router v4.
+It depends. [`RelayEnvironmentProvider`](#relayenvironmentprovider) with [`RelayRenderer`](#relayrenderer) is a much easier to understand (just wrap your app with `RelayEnvironmentProvider` and use `RelayRenderer` at will), but whenever you [`refreshRelayEnvironment`](#withrelayenvironment) your entire component tree will update. This can make other React patterns tricky, for instance this update could trigger transition animations for navigating between routes [React Router v4](https://reacttraining.com/react-router/).
 
 ```js
 import { RelayEnvironmentProvider, RelayRenderer } from 'finish-line'
@@ -95,7 +95,7 @@ export default () => (
 )
 ```
 
-Since `relayRendererFactory` is more self-contained, you can move `refreshRelayEnvironment` updates further down your component tree. The downside is that this is harder to understand and you could end up with warnings from React if they update while nested (you can always use a regular `RelayRenderer` inside your custom one).
+Since [`relayRendererFactory`](#relayrendererfactory) is more self-contained, you can move `refreshRelayEnvironment` updates further down your component tree. The downside is that this is harder to understand and you could end up with warnings from React if they update while nested (you can always use a regular `RelayRenderer` inside your custom one).
 
 ```js
 import { relayRendererFactory, RelayRenderer, buildEnvironment } from 'finish-line'
@@ -131,11 +131,11 @@ const App = () => (
 
 ### `buildEnvironment`
 
-Builds a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) that you can you can pass to Relay's `QueryRenderer`, `commitMutation`, etc. It can also be passed to Finish Line's `RelayRenderer` and `relayRendererFactory`.
+Builds a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) that you can you can pass to Relay's [`QueryRenderer`](#https://facebook.github.io/relay/docs/query-renderer.html), [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html), etc. It can also be passed to Finish Line's [`RelayRenderer`](#relayrenderer) and [`relayRendererFactory`](#relayrendererfactory).
 
 #### with no arguments
 
-It uses Finish Line's default `buildFetchQuery` for the Relay Network instance.
+It uses Finish Line's default [`buildFetchQuery`](#buildfetchquery) for the Relay [Network](https://facebook.github.io/relay/docs/network-layer.html) instance.
 
 ```js
 import { QueryRenderer } from 'react-relay'
@@ -147,7 +147,7 @@ const environment = buildEnvironment()
 
 #### with a config object
 
-It passes the config object through to Finish Line's `buildFetchQuery`.
+It passes the config object through to Finish Line's [`buildFetchQuery`](#buildfetchquery).
 
 ```js
 import { QueryRenderer } from 'react-relay'
@@ -159,7 +159,7 @@ const environment = buildEnvironment({ cache, headers })
 
 #### with a function
 
-It uses the given function as the fetch query for the `Network`.
+It uses the given function as the fetch query for the [Network](https://facebook.github.io/relay/docs/network-layer.html).
 
 ```js
 import { QueryRenderer } from 'react-relay'
@@ -181,7 +181,7 @@ const environment = buildEnvironment(fetchQuery)
 
 ### `buildFetchQuery`
 
-Creates a function that you can pass to Relay's `Network.create` to fetch your data. Posts JSON unless uploadables are present, in which case it posts `FormData`. It can be called with no arguments or with a config object with some or all of the following:
+Creates a function that you can pass to Relay's [`Network.create`](https://facebook.github.io/relay/docs/network-layer.html) to fetch your data. Posts JSON unless uploadables are present, in which case it posts [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData). It can be called with no arguments or with a config object with some or all of the following:
 
 - `path` - A string of where to query data from. Defaults to `'/graphql'`
 - `headers` - An object containing whatever headers you need to send to the server. Adds `'Content-Type': 'application/json'` when applicable.
