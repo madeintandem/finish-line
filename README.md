@@ -18,6 +18,54 @@ Or via NPM:
 
 ## Usage
 
+### `RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?
+
+It depends. `RelayEnvironmentProvider` with `RelayRenderer` is a much easier to understand (just wrap your app with `RelayEnvironmentProvider` and use `RelayRenderer` at will), but whenever you `refreshRelayEnvironment` your entire component tree will update. This can make other React patterns tricky, for instance this update could trigger transition animations for navigating between routes React Router v4.
+
+```js
+import { RelayEnvironmentProvider, RelayRenderer } from 'finish-line'
+
+const App = () => (
+  <div>
+    <RelayRenderer {/* ... */} />
+    <div>
+      <RelayRenderer {/* ... */} />
+    </div>
+  </div>
+)
+
+export default () => (
+  <RelayEnvironmentProvider {/* ... */}>
+    <App />
+  </RelayEnvironmentProvider>
+)
+```
+
+Since `relayRendererFactory` is more self-contained, you can move `refreshRelayEnvironment` updates further down your component tree. The downside is that this is harder to understand and you could end up with warnings from React if they update while nested (you can always use a regular `RelayRenderer` inside your custom one).
+
+```js
+import { relayRendererFactory, RelayRenderer, buildEnvironment } from 'finish-line'
+
+const MyRelayRenderer = relayRendererFactory(buildEnvironment)
+
+// ...
+
+const MyContainer = (props) => (
+  <div>
+    <h2>This works</h2>
+    <RelayRenderer {/* ... */} />
+  </div>
+)
+
+const App = () => (
+  <div>
+    <MyRelayRenderer container={MyContainer} {/* ... */} />
+    <br />
+    <MyRelayRenderer container={MyContainer} {/* ... */} />
+  </div>
+)
+```
+
 ## API
 
 ### `buildEnvironment`
