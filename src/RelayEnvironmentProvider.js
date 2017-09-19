@@ -9,9 +9,11 @@ export class RelayEnvironmentProvider extends Component {
   }
 
   static childContextTypes = {
-    commitMutation: PropTypes.func.isRequired,
-    relayEnvironment: PropTypes.any.isRequired,
-    refreshRelayEnvironment: PropTypes.func.isRequired
+    relayEnvironment: PropTypes.shape({
+      commitMutation: PropTypes.func.isRequired,
+      current: PropTypes.any.isRequired,
+      refresh: PropTypes.func.isRequired
+    }).isRequired
   }
 
   state = {
@@ -20,9 +22,11 @@ export class RelayEnvironmentProvider extends Component {
 
   getChildContext () {
     return {
-      commitMutation: this.commitMutation,
-      relayEnvironment: this.state.environment,
-      refreshRelayEnvironment: this.refreshEnvironment
+      relayEnvironment: {
+        commitMutation: this.commitMutation,
+        current: this.state.environment,
+        refresh: this.refresh
+      }
     }
   }
 
@@ -30,7 +34,7 @@ export class RelayEnvironmentProvider extends Component {
     commitMutation(this.state.environment, arg)
   }
 
-  refreshEnvironment = (callback) => {
+  refresh = (callback) => {
     const environment = this.props.environmentProvider()
     this.setState({ environment }, callback)
   }

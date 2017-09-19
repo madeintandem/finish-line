@@ -41,25 +41,25 @@ describe('#getChildContext', () => {
 
   beforeEach(() => {
     loadSubject({ environmentProvider: uniqueId })
-    result = subject.instance().getChildContext()
+    result = subject.instance().getChildContext().relayEnvironment
   })
 
   it('has the current environment', () => {
     const currentEnv = subject.state().environment
     expect(currentEnv).toBeTruthy()
-    expect(result.relayEnvironment).toEqual(currentEnv)
+    expect(result.current).toEqual(currentEnv)
   })
 
-  it('has the refreshRelayEnvironment', () => {
-    expect(result.refreshRelayEnvironment).toEqual(subject.instance().refreshEnvironment)
+  it('has refresh', () => {
+    expect(result.refresh).toEqual(subject.instance().refresh)
   })
 
   it('has commitMutation', () => {
     expect(result.commitMutation).toEqual(subject.instance().commitMutation)
   })
 
-  it('is only the environment, refreshRelayEnvironment, and commitMutation', () => {
-    expect(keys(result)).toEqual(['commitMutation', 'relayEnvironment', 'refreshRelayEnvironment'])
+  it('is only the current environment, refresh, and commitMutation', () => {
+    expect(keys(result)).toEqual(['commitMutation', 'current', 'refresh'])
   })
 })
 
@@ -73,7 +73,7 @@ describe('#commitMutation', () => {
   })
 })
 
-describe('#refreshEnvironment', () => {
+describe('#refresh', () => {
   let count
 
   beforeEach(() => {
@@ -84,13 +84,13 @@ describe('#refreshEnvironment', () => {
 
   it('sets a new environment', () => {
     expect(subject.state().environment).toEqual(1)
-    subject.instance().refreshEnvironment()
+    subject.instance().refresh()
     expect(subject.state().environment).toEqual(2)
   })
 
   it('passes through the callback to set state', () => {
     const callback = jest.fn()
-    subject.instance().refreshEnvironment(callback)
+    subject.instance().refresh(callback)
     expect(callback).toHaveBeenCalled()
   })
 })

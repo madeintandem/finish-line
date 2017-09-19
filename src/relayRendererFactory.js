@@ -23,16 +23,18 @@ export const relayRendererFactory = (environmentProvider) => {
     static childContextTypes = RelayEnvironmentProvider.childContextTypes
 
     state = {
-      relayEnvironment: currentEnvironment
+      environment: currentEnvironment
     }
 
     customRelayRendererId = id++
 
     getChildContext () {
       return {
-        commitMutation: wrappedCommitMutation,
-        relayEnvironment: this.state.relayEnvironment,
-        refreshRelayEnvironment: refreshRelayEnvironment
+        relayEnvironment: {
+          commitMutation: wrappedCommitMutation,
+          current: this.state.environment,
+          refresh: refreshRelayEnvironment
+        }
       }
     }
 
@@ -44,8 +46,8 @@ export const relayRendererFactory = (environmentProvider) => {
       customRendererCache.delete(this.customRelayRendererId)
     }
 
-    setNewEnvironment = (relayEnvironment) => {
-      this.setState({ relayEnvironment })
+    setNewEnvironment = (environment) => {
+      this.setState({ environment })
     }
 
     render () {

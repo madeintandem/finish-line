@@ -47,13 +47,13 @@ const MyComponent = ({ somethingFromQuery }) => (
   <span>{somethingFromQuery}</span>
 )
 
-const Buttons = withRelayEnvironment(({ commitMutation, refreshRelayEnvironment }) => (
+const Buttons = withRelayEnvironment(({ relayEnvironment }) => (
   <div>
-    <button onClick={() => commitMutation({ mutationExample: 'config' })}>
+    <button onClick={() => relayEnvironment.commitMutation({ mutationExample: 'config' })}>
       Mutate!
     </button>
 
-    <button onClick={refreshRelayEnvironment}>
+    <button onClick={relayEnvironment.refresh}>
       Reset!
     </button>
   </div>
@@ -74,7 +74,7 @@ const App = () => (
 
 ### `RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?
 
-It depends. [`RelayEnvironmentProvider`](#relayenvironmentprovider) with [`RelayRenderer`](#relayrenderer) is a much easier to understand (just wrap your app with `RelayEnvironmentProvider` and use `RelayRenderer` at will), but whenever you [`refreshRelayEnvironment`](#withrelayenvironment) your entire component tree will update. This can make other React patterns tricky, for instance this update could trigger transition animations for navigating between routes [React Router v4](https://reacttraining.com/react-router/).
+It depends. [`RelayEnvironmentProvider`](#relayenvironmentprovider) with [`RelayRenderer`](#relayrenderer) is a much easier to understand (just wrap your app with `RelayEnvironmentProvider` and use `RelayRenderer` at will), but whenever you [`relayEnvironment.refresh`](#withrelayenvironment) your entire component tree will update. This can make other React patterns tricky, for instance this update could trigger transition animations for navigating between routes [React Router v4](https://reacttraining.com/react-router/).
 
 ```js
 import { RelayEnvironmentProvider, RelayRenderer } from 'finish-line'
@@ -95,7 +95,7 @@ export default () => (
 )
 ```
 
-Since [`relayRendererFactory`](#relayrendererfactory) is more self-contained, you can move `refreshRelayEnvironment` updates further down your component tree. The downside is that this is harder to understand and you could end up with warnings from React if they update while nested (you can always use a regular `RelayRenderer` inside your custom one).
+Since [`relayRendererFactory`](#relayrendererfactory) is more self-contained, you can move `relayEnvironment.refresh` updates further down your component tree. The downside is that this is harder to understand and you could end up with warnings from React if they update while nested (you can always use a regular `RelayRenderer` inside your custom one).
 
 ```js
 import { relayRendererFactory, RelayRenderer, createEnvironment } from 'finish-line'
@@ -294,11 +294,11 @@ const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
 
 ### `withRelayEnvironment`
 
-Wraps your components to provides the following `props`:
+Wraps your components to provides a single `prop` of `relayEnvironment` which contains the following:
 
 - `commitMutation` - Relay's [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html) function wrapped up so you don't have to pass the `environment` in.
-- `relayEnvironment` - The current instance of Relay's [`environment`](https://facebook.github.io/relay/docs/relay-environment.html). This comes from the `environmentProvider` that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory). Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
-- `refreshRelayEnvironment` - A function that will call the `environmentProvider` to replace the current `environment`. This is handy when someone signs in or out of your application. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result. If called by a component rendered by a custom `RelayRenderer` (via `relayRendererFactory`), all custom `RelayRenderer`s that are rendered will update.
+- `current` - The current instance of Relay's [`environment`](https://facebook.github.io/relay/docs/relay-environment.html). This comes from the `environmentProvider` that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory). Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
+- `refresh` - A function that will call the `environmentProvider` to replace the current `environment`. This is handy when someone signs in or out of your application. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result. If called by a component rendered by a custom `RelayRenderer` (via `relayRendererFactory`), all custom `RelayRenderer`s that are rendered will update.
 
 It accepts a `wrappedComponentRef` `prop` that will provide a [`ref`](https://facebook.github.io/react/docs/refs-and-the-dom.html) of the wrapped component when rendered.
 
