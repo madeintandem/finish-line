@@ -1,11 +1,11 @@
 /* eslint-env jest */
 import { Environment, Network, RecordSource, Store } from 'relay-runtime'
-import { buildEnvironment } from '../buildEnvironment'
-import { buildFetchQuery } from '../buildFetchQuery'
+import { createEnvironment } from '../createEnvironment'
+import { createFetchQuery } from '../createFetchQuery'
 
-jest.mock('../buildFetchQuery', () => {
-  const buildFetchQuery = jest.fn(() => 'buildFetchQuery')
-  return { buildFetchQuery }
+jest.mock('../createFetchQuery', () => {
+  const createFetchQuery = jest.fn(() => 'createFetchQuery')
+  return { createFetchQuery }
 })
 
 jest.mock('relay-runtime', () => {
@@ -14,34 +14,34 @@ jest.mock('relay-runtime', () => {
   return { ...actual, Network: NetworkMock }
 })
 
-it('builds an environment when given nothing', () => {
-  const result = buildEnvironment()
+it('creates an environment when given nothing', () => {
+  const result = createEnvironment()
   expect(result).toBeInstanceOf(Environment)
   expect(result._network).toEqual('network')
   expect(result._store).toBeInstanceOf(Store)
   expect(result._store._recordSource).toBeInstanceOf(RecordSource)
-  expect(Network.create).toHaveBeenCalledWith('buildFetchQuery')
-  expect(buildFetchQuery).toHaveBeenCalled()
+  expect(Network.create).toHaveBeenCalledWith('createFetchQuery')
+  expect(createFetchQuery).toHaveBeenCalled()
 })
 
-it('builds an environment when given buildFetchQuery configs', () => {
-  const configs = { buildFetchQuery: 'configs' }
-  const result = buildEnvironment(configs)
+it('creates an environment when given createFetchQuery configs', () => {
+  const configs = { createFetchQuery: 'configs' }
+  const result = createEnvironment(configs)
   expect(result).toBeInstanceOf(Environment)
   expect(result._network).toEqual('network')
   expect(result._store).toBeInstanceOf(Store)
   expect(result._store._recordSource).toBeInstanceOf(RecordSource)
-  expect(Network.create).toHaveBeenCalledWith('buildFetchQuery')
-  expect(buildFetchQuery).toHaveBeenCalledWith(configs)
+  expect(Network.create).toHaveBeenCalledWith('createFetchQuery')
+  expect(createFetchQuery).toHaveBeenCalledWith(configs)
 })
 
-it('builds an environment when given a fetch query function', () => {
+it('creates an environment when given a fetch query function', () => {
   const fetchQuery = () => null
-  const result = buildEnvironment(fetchQuery)
+  const result = createEnvironment(fetchQuery)
   expect(result).toBeInstanceOf(Environment)
   expect(result._network).toEqual('network')
   expect(result._store).toBeInstanceOf(Store)
   expect(result._store._recordSource).toBeInstanceOf(RecordSource)
   expect(Network.create).toHaveBeenCalledWith(fetchQuery)
-  expect(buildFetchQuery).not.toHaveBeenCalled()
+  expect(createFetchQuery).not.toHaveBeenCalled()
 })

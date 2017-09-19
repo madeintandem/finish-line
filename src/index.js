@@ -1,5 +1,5 @@
-export { buildEnvironment } from './buildEnvironment'
-export { buildFetchQuery } from './buildFetchQuery'
+export { createEnvironment } from './createEnvironment'
+export { createFetchQuery } from './createFetchQuery'
 export { RelayEnvironmentProvider } from './RelayEnvironmentProvider'
 export { RelayRenderer } from './RelayRenderer'
 export { relayRendererFactory } from './relayRendererFactory'

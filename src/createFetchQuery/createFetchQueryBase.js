@@ -1,4 +1,4 @@
-const buildHeaders = (givenHeaders, isJson) => {
+const createHeaders = (givenHeaders, isJson) => {
   const headers = givenHeaders || {}
   if (isJson) {
     return {
@@ -10,7 +10,7 @@ const buildHeaders = (givenHeaders, isJson) => {
   }
 }
 
-const buildBody = (query, variables, uploadables) => {
+const createBody = (query, variables, uploadables) => {
   if (uploadables) {
     const uploadablesMap = new Map(Object.entries(uploadables))
     const formData = new FormData()
@@ -25,12 +25,12 @@ const buildBody = (query, variables, uploadables) => {
   }
 }
 
-export const buildFetchQueryBase = ({ path, headers } = {}) => {
+export const createFetchQueryBase = ({ path, headers } = {}) => {
   const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
     return fetch(path || '/graphql', {
       method: 'POST',
-      headers: buildHeaders(headers, !uploadables),
-      body: buildBody(operation.text, variables, uploadables)
+      headers: createHeaders(headers, !uploadables),
+      body: createBody(operation.text, variables, uploadables)
     }).then(response => response.json())
   }
   return fetchQuery

@@ -5,8 +5,8 @@
   "main": "index.js",
   "module": "es/index.js",
   "files": [
-    "buildEnvironment.js",
-    "buildFetchQuery",
+    "createEnvironment.js",
+    "createFetchQuery",
     "es",
     "index.js",
     "RelayEnvironmentProvider.js",

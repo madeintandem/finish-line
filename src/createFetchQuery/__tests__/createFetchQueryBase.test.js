@@ -1,7 +1,7 @@
 /* eslint-env jest */
-import { buildFetchQueryBase } from '../buildFetchQueryBase'
+import { createFetchQueryBase } from '../createFetchQueryBase'
 
-describe('buildFetchQueryBase', () => {
+describe('createFetchQueryBase', () => {
   let query
   let operation
   let variables
@@ -16,7 +16,7 @@ describe('buildFetchQueryBase', () => {
   })
 
   it('calls fetch properly', () => {
-    const subject = buildFetchQueryBase()
+    const subject = createFetchQueryBase()
     subject(operation, variables)
 
     expect(fetch).toHaveBeenCalledWith('/graphql', {
@@ -32,7 +32,7 @@ describe('buildFetchQueryBase', () => {
     formData.append('query', operation.text)
     formData.append('variables', JSON.stringify(variables))
     formData.append('maybe', 'a png')
-    const subject = buildFetchQueryBase()
+    const subject = createFetchQueryBase()
     subject(operation, variables, { cache: 'config' }, uploadables)
 
     expect(fetch).toHaveBeenCalledWith(expect.anything(), {
@@ -44,7 +44,7 @@ describe('buildFetchQueryBase', () => {
 
   it('accepts a path', () => {
     const path = '/some-other-path'
-    const subject = buildFetchQueryBase({ path })
+    const subject = createFetchQueryBase({ path })
     subject(operation, variables)
 
     expect(fetch).toHaveBeenCalledWith(path, expect.anything())
@@ -52,7 +52,7 @@ describe('buildFetchQueryBase', () => {
 
   it('accepts additional headers', () => {
     const headers = { other: 'headers' }
-    const subject = buildFetchQueryBase({ headers })
+    const subject = createFetchQueryBase({ headers })
     subject(operation, variables)
 
     expect(fetch).toHaveBeenCalledWith(expect.anything(), {
@@ -66,7 +66,7 @@ describe('buildFetchQueryBase', () => {
   })
 
   it('converts the response to json', async () => {
-    const subject = buildFetchQueryBase()
+    const subject = createFetchQueryBase()
     const result = await subject(operation, variables)
     expect(result).toEqual(response)
   })

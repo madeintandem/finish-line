@@ -8,8 +8,8 @@ Handy [React](https://facebook.github.io/react/) components and functions to cut
 - [Usage](#usage)
   - [`RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?](#relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 - [API](#api)
-  - [`buildEnvironment`](#buildenvironment)
-  - [`buildFetchQuery`](#buildfetchquery)
+  - [`createEnvironment`](#createenvironment)
+  - [`createFetchQuery`](#createfetchquery)
   - [`RelayEnvironmentProvider`](#relayenvironmentprovider)
   - [`RelayRenderer`](#relayrenderer)
   - [`relayRendererFactory`](#relayrendererfactory)
@@ -40,7 +40,7 @@ import {
   RelayRenderer,
   RelayEnvironmentProvider,
   withRelayEnvironment,
-  buildEnvironment
+  createEnvironment
 } from 'finish-line'
 
 const MyComponent = ({ somethingFromQuery }) => (
@@ -62,7 +62,7 @@ const Buttons = withRelayEnvironment(({ commitMutation, refreshRelayEnvironment 
 const query = graphql`query { somethingFromQuery }`
 
 const App = () => (
-  <RelayEnvironmentProvider environmentProvider={buildEnvironment}>
+  <RelayEnvironmentProvider environmentProvider={createEnvironment}>
     <div>
       <h2>Some examples!</h2>
       <RelayRenderer query={query} container={MyComponent} />
@@ -98,9 +98,9 @@ export default () => (
 Since [`relayRendererFactory`](#relayrendererfactory) is more self-contained, you can move `refreshRelayEnvironment` updates further down your component tree. The downside is that this is harder to understand and you could end up with warnings from React if they update while nested (you can always use a regular `RelayRenderer` inside your custom one).
 
 ```js
-import { relayRendererFactory, RelayRenderer, buildEnvironment } from 'finish-line'
+import { relayRendererFactory, RelayRenderer, createEnvironment } from 'finish-line'
 
-const MyRelayRenderer = relayRendererFactory(buildEnvironment)
+const MyRelayRenderer = relayRendererFactory(createEnvironment)
 
 // ...
 
@@ -122,38 +122,38 @@ const App = () => (
 
 ## API
 
-- [`buildEnvironment`](#buildenvironment)
-- [`buildFetchQuery`](#buildfetchquery)
+- [`createEnvironment`](#createenvironment)
+- [`createFetchQuery`](#createfetchquery)
 - [`RelayEnvironmentProvider`](#relayenvironmentprovider)
 - [`RelayRenderer`](#relayrenderer)
 - [`relayRendererFactory`](#relayrendererfactory)
 - [`withRelayEnvironment`](#withrelayenvironment)
 
-### `buildEnvironment`
+### `createEnvironment`
 
-Builds a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) that you can you can pass to Relay's [`QueryRenderer`](#https://facebook.github.io/relay/docs/query-renderer.html), [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html), etc. It can also be passed to Finish Line's [`RelayRenderer`](#relayrenderer) and [`relayRendererFactory`](#relayrendererfactory).
+Creates a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) that you can you can pass to Relay's [`QueryRenderer`](#https://facebook.github.io/relay/docs/query-renderer.html), [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html), etc. It can also be passed to Finish Line's [`RelayRenderer`](#relayrenderer) and [`relayRendererFactory`](#relayrendererfactory).
 
 #### with no arguments
 
-It uses Finish Line's default [`buildFetchQuery`](#buildfetchquery) for the Relay [Network](https://facebook.github.io/relay/docs/network-layer.html) instance.
+It uses Finish Line's default [`createFetchQuery`](#createfetchquery) for the Relay [Network](https://facebook.github.io/relay/docs/network-layer.html) instance.
 
 ```js
 import { QueryRenderer } from 'react-relay'
-import { buildEnvironment } from 'finish-line'
+import { createEnvironment } from 'finish-line'
 // ...
-const environment = buildEnvironment()
+const environment = createEnvironment()
 <QueryRenderer environment={environment} {/* ... */} />
 ```
 
 #### with a config object
 
-It passes the config object through to Finish Line's [`buildFetchQuery`](#buildfetchquery).
+It passes the config object through to Finish Line's [`createFetchQuery`](#createfetchquery).
 
 ```js
 import { QueryRenderer } from 'react-relay'
-import { buildEnvironment } from 'finish-line'
+import { createEnvironment } from 'finish-line'
 // ...
-const environment = buildEnvironment({ cache, headers })
+const environment = createEnvironment({ cache, headers })
 <QueryRenderer environment={environment} {/* ... */} />
 ```
 
@@ -163,7 +163,7 @@ It uses the given function as the fetch query for the [Network](https://facebook
 
 ```js
 import { QueryRenderer } from 'react-relay'
-import { buildEnvironment } from 'finish-line'
+import { createEnvironment } from 'finish-line'
 // ...
 const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
   return fetch('/graphql', {
@@ -175,11 +175,11 @@ const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
     })
   }).then(response => response.json())
 
-const environment = buildEnvironment(fetchQuery)
+const environment = createEnvironment(fetchQuery)
 <QueryRenderer environment={environment} {/* ... */} />
 ```
 
-### `buildFetchQuery`
+### `createFetchQuery`
 
 Creates a function that you can pass to Relay's [`Network.create`](https://facebook.github.io/relay/docs/network-layer.html) to fetch your data. Posts JSON unless uploadables are present, in which case it posts [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData). It can be called with no arguments or with a config object with some or all of the following:
 
@@ -189,9 +189,9 @@ Creates a function that you can pass to Relay's [`Network.create`](https://faceb
 
 ```js
 import { QueryResponseCache, Network } from 'relay-runtime'
-import { buildFetchQuery } from 'finish-line'
+import { createFetchQuery } from 'finish-line'
 
-const fetchQuery = buildFetchQuery()
+const fetchQuery = createFetchQuery()
 const network = Network.create(fetchQuery)
 
 // or with all options
@@ -200,7 +200,7 @@ const path = 'https://example.org/graphql'
 const headers = { Authorization: 'Bearer 1234567890' }
 const cache = new QueryResponseCache({ size: 250, ttl: 5 * 60 * 1000 }) // 5 minute cache
 
-const fetchQuery = buildFetchQuery({ path, headers, cache})
+const fetchQuery = createFetchQuery({ path, headers, cache})
 const network = Network.create(fetchQuery)
 ```
 
@@ -212,13 +212,13 @@ A component that helps manage your application's Relay `Environment`. It takes a
 import {
   RelayEnvironmentProvider,
   RelayRenderer,
-  buildEnvironment,
+  createEnvironment,
   withRelayEnvironment
 } from 'finish-line'
 import { MyComponent } from './MyComponent'
 
 const headers = { Authorization: 'Bearer 1234567890' }
-const newAppEnvironment = () => buildEnvironment({ headers })
+const newAppEnvironment = () => createEnvironment({ headers })
 const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 
 // ...
@@ -275,11 +275,11 @@ const Loading = (props) => (
 Creates a component that behaves like [`RelayRenderer`](#relayrenderer) but does not need to be rendered inside a [`RelayEnvironmentProvider`](#relayenvironmentprovider). All instances of the created component class will share the same environment and stay in sync with one another. [`withRelayEnvironment`](#withrelayenvironment) will work as it normally does for anything rendered by your factory built `RelayRenderer`. It takes an `environmentProvider` `prop`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 
 ```js
-import { relayRendererFactory, buildEnvironment, withRelayEnvironment } from 'finish-line'
+import { relayRendererFactory, createEnvironment, withRelayEnvironment } from 'finish-line'
 import { MyComponent } from './MyComponent'
 
 const headers = { Authorization: 'Bearer 1234567890' }
-const newAppEnvironment = () => buildEnvironment({ headers })
+const newAppEnvironment = () => createEnvironment({ headers })
 const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 
 const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
@@ -315,7 +315,7 @@ import { MyComponent } from './MyComponent'
 const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 
 const headers = { Authorization: 'Bearer 1234567890' }
-const newAppEnvironment = () => buildEnvironment({ headers })
+const newAppEnvironment = () => createEnvironment({ headers })
 const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
 
 // ...

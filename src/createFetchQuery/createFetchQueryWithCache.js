@@ -1,7 +1,7 @@
-import { buildFetchQueryBase } from './buildFetchQueryBase'
+import { createFetchQueryBase } from './createFetchQueryBase'
 
-export const buildFetchQueryWithCache = ({ cache, ...options }) => {
-  const fetchQueryWithoutCache = buildFetchQueryBase(options)
+export const createFetchQueryWithCache = ({ cache, ...options }) => {
+  const fetchQueryWithoutCache = createFetchQueryBase(options)
 
   const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
     const { name: queryId } = operation

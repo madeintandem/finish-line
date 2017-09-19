@@ -1,16 +1,16 @@
 /* eslint-env jest */
 import { QueryResponseCache } from 'relay-runtime'
-import { buildFetchQueryWithCache } from '../buildFetchQueryWithCache'
-import { buildFetchQueryBase } from '../buildFetchQueryBase'
+import { createFetchQueryWithCache } from '../createFetchQueryWithCache'
+import { createFetchQueryBase } from '../createFetchQueryBase'
 
-jest.mock('../buildFetchQueryBase', () => {
+jest.mock('../createFetchQueryBase', () => {
   const {
-    buildFetchQueryBase: buildFetchQueryBaseOriginal
-  } = require.requireActual('../buildFetchQueryBase')
+    createFetchQueryBase: createFetchQueryBaseOriginal
+  } = require.requireActual('../createFetchQueryBase')
 
-  const buildFetchQueryBase = jest.fn(buildFetchQueryBaseOriginal)
+  const createFetchQueryBase = jest.fn(createFetchQueryBaseOriginal)
 
-  return { buildFetchQueryBase }
+  return { createFetchQueryBase }
 })
 
 let cache
@@ -28,15 +28,15 @@ beforeEach(() => {
   variables = { some: 'variables' }
 })
 
-it('passes through non-cache options to buildFetchQueryBase', () => {
+it('passes through non-cache options to createFetchQueryBase', () => {
   const path = '/some-path'
   const headers = { some: 'headers' }
-  buildFetchQueryWithCache({ cache, path, headers })
-  expect(buildFetchQueryBase).toHaveBeenCalledWith({ path, headers })
+  createFetchQueryWithCache({ cache, path, headers })
+  expect(createFetchQueryBase).toHaveBeenCalledWith({ path, headers })
 })
 
 it('clears the cache when executing a mutation', () => {
-  const subject = buildFetchQueryWithCache({ cache })
+  const subject = createFetchQueryWithCache({ cache })
   cache.clear = jest.fn()
 
   subject(operation, variables)
@@ -50,7 +50,7 @@ it('clears the cache when executing a mutation', () => {
 it('uses a cached value when possible', async () => {
   const cachedValues = { some: 'cached stuff' }
   cache.set(operation.name, variables, cachedValues)
-  const subject = buildFetchQueryWithCache({ cache })
+  const subject = createFetchQueryWithCache({ cache })
   const result = await subject(operation, variables)
 
   expect(fetch).not.toHaveBeenCalled()
@@ -58,7 +58,7 @@ it('uses a cached value when possible', async () => {
 })
 
 it('makes the fetch and returns the result', async () => {
-  const subject = buildFetchQueryWithCache({ cache })
+  const subject = createFetchQueryWithCache({ cache })
   const result = await subject(operation, variables)
 
   expect(fetch).toHaveBeenCalled()
@@ -66,7 +66,7 @@ it('makes the fetch and returns the result', async () => {
 })
 
 it('caches the result when successful', async () => {
-  const subject = buildFetchQueryWithCache({ cache })
+  const subject = createFetchQueryWithCache({ cache })
 
   fetch.mockResponse(JSON.stringify(response))
   await subject(operation, variables)
