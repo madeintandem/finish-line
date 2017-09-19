@@ -28,7 +28,8 @@
     "lint:fix": "eslint . --fix",
     "test": "jest",
     "test:watch": "jest --watch",
-    "validate": "yarn lint && yarn test"
+    "validate": "yarn lint && yarn test",
+    "verify-and-publish": "yarn clean:light && yarn validate && yarn build && yarn publish"
   },
   "keywords": [
     "react",
