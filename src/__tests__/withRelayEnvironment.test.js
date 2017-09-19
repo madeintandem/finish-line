@@ -15,7 +15,7 @@ describe('provided props', () => {
   })
 
   beforeEach(() => {
-    envProvider = mount(<RelayEnvironmentProvider environmentProvider={uniqueId}>
+    envProvider = mount(<RelayEnvironmentProvider create={uniqueId}>
       <Dummy />
     </RelayEnvironmentProvider>)
   })
@@ -66,7 +66,7 @@ describe('wrappedComponentRef', () => {
       render () { return null }
     }
     const Wrapped = withRelayEnvironment(Dummy)
-    const subject = mount(<RelayEnvironmentProvider environmentProvider={() => 1}>
+    const subject = mount(<RelayEnvironmentProvider create={() => 1}>
       <Wrapped wrappedComponentRef={() => 'hi'} />
     </RelayEnvironmentProvider>)
     expect(subject).toMatchSnapshot()

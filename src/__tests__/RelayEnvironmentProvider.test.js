@@ -27,11 +27,11 @@ const loadSubject = (props) => {
 describe('default state', () => {
   it('has an environment from the environment provider', () => {
     const environment = 'env stub'
-    const environmentProvider = jest.fn(() => environment)
+    const create = jest.fn(() => environment)
 
-    loadSubject({ environmentProvider })
+    loadSubject({ create })
 
-    expect(environmentProvider).toHaveBeenCalled()
+    expect(create).toHaveBeenCalled()
     expect(subject.state()).toEqual({ environment })
   })
 })
@@ -40,7 +40,7 @@ describe('#getChildContext', () => {
   let result
 
   beforeEach(() => {
-    loadSubject({ environmentProvider: uniqueId })
+    loadSubject({ create: uniqueId })
     result = subject.instance().getChildContext().relayEnvironment
   })
 
@@ -67,7 +67,7 @@ describe('#commitMutation', () => {
   it('calls commitMutation from relay with the environment passing through other arguments', () => {
     const environment = 'some environment'
     const arg = { some: 'mutation', config: 'stuff' }
-    loadSubject({ environmentProvider: () => environment })
+    loadSubject({ create: () => environment })
     subject.instance().commitMutation(arg)
     expect(commitMutation).toHaveBeenCalledWith(environment, arg)
   })
@@ -79,7 +79,7 @@ describe('#refresh', () => {
   beforeEach(() => {
     count = 1
     const counter = () => count++
-    loadSubject({ environmentProvider: counter })
+    loadSubject({ create: counter })
   })
 
   it('sets a new environment', () => {
@@ -97,7 +97,7 @@ describe('#refresh', () => {
 
 describe('#render', () => {
   it('is the children', () => {
-    loadSubject({ environmentProvider: uniqueId })
+    loadSubject({ create: uniqueId })
     expect(subject.instance().render()).toEqual(<Dummy />)
   })
 })

@@ -4,7 +4,7 @@ import { commitMutation } from 'react-relay'
 
 export class RelayEnvironmentProvider extends Component {
   static propTypes = {
-    environmentProvider: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
     children: PropTypes.any.isRequired
   }
 
@@ -17,7 +17,7 @@ export class RelayEnvironmentProvider extends Component {
   }
 
   state = {
-    environment: this.props.environmentProvider()
+    environment: this.props.create()
   }
 
   getChildContext () {
@@ -35,7 +35,7 @@ export class RelayEnvironmentProvider extends Component {
   }
 
   refresh = (callback) => {
-    const environment = this.props.environmentProvider()
+    const environment = this.props.create()
     this.setState({ environment }, callback)
   }
 

@@ -2,7 +2,7 @@
 
 exports[`wrappedComponentRef does not pass the wrapped component ref to the wrapped component 1`] = `
 <RelayEnvironmentProvider
-  environmentProvider={[Function]}
+  create={[Function]}
 >
   <withRelayEnvironment(Dummy)
     wrappedComponentRef={[Function]}
