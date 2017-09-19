@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { QueryRenderer } from 'react-relay'
 import PropTypes from 'prop-types'
+import { warn } from './warn'
 
 export class RelayRenderer extends Component {
   static propTypes = {
@@ -21,6 +22,15 @@ export class RelayRenderer extends Component {
 
   state = {
     queryRendererKey: 1
+  }
+
+  componentWillMount () {
+    const { render, container, error, loading } = this.props
+
+    warn(
+      !!(render && (container || error || loading)),
+      'RelayRenderer was rendered with a `render` prop and `container`, `error`, and/or `loading` props as well. Passing `render` causes those other props to have no affect.'
+    )
   }
 
   refreshRenderer = () => {

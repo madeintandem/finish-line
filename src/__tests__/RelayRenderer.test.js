@@ -2,10 +2,16 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { RelayRenderer } from '../RelayRenderer'
+import { warn } from '../warn'
 
 jest.mock('react-relay', () => {
   const QueryRenderer = (props) => null
   return { QueryRenderer }
+})
+
+jest.mock('../warn', () => {
+  const warn = jest.fn()
+  return { warn }
 })
 
 const mockContext = () => ({
@@ -118,5 +124,38 @@ describe('#refreshRenderer', () => {
     subject.instance().refreshRenderer()
     expect(subject).toHaveState('queryRendererKey', 3)
     expect(subject.find('QueryRenderer').key()).toEqual('3')
+  })
+})
+
+describe('#componentWillMount', () => {
+  describe('given render and any prop that is ignored by render', () => {
+    it('logs a warning', () => {
+      shallow(<RelayRenderer
+        query='query'
+        render={() => null}
+        container={() => null}
+      />, { context: mockContext() })
+      expect(warn).toHaveBeenCalledWith(true, 'RelayRenderer was rendered with a `render` prop and `container`, `error`, and/or `loading` props as well. Passing `render` causes those other props to have no affect.')
+    })
+  })
+
+  describe('given render without props that are ignored by render', () => {
+    it('does not log a warning', () => {
+      shallow(<RelayRenderer
+        query='query'
+        render={() => null}
+      />, { context: mockContext() })
+      expect(warn).toHaveBeenCalledWith(false, expect.anything())
+    })
+  })
+
+  describe('not given render', () => {
+    it('does not log a warning', () => {
+      shallow(<RelayRenderer
+        query='query'
+        container={() => null}
+      />, { context: mockContext() })
+      expect(warn).toHaveBeenCalledWith(false, expect.anything())
+    })
   })
 })
