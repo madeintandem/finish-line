@@ -65,6 +65,24 @@ describe('createFetchQueryBase', () => {
     })
   })
 
+  it('accepts a function for headers', () => {
+    const cacheConfig = { cache: 'config' }
+    const uploadables = null
+    const headers = jest.fn(() => ({ my: 'header' }))
+    const subject = createFetchQueryBase({ headers })
+    subject(operation, variables, cacheConfig, uploadables)
+
+    expect(headers).toHaveBeenCalledWith(operation, variables, cacheConfig, uploadables)
+    expect(fetch).toHaveBeenCalledWith(expect.anything(), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        my: 'header'
+      },
+      body: JSON.stringify({ query, variables })
+    })
+  })
+
   it('converts the response to json', async () => {
     const subject = createFetchQueryBase()
     const result = await subject(operation, variables)

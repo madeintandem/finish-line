@@ -1,5 +1,11 @@
-const createHeaders = (givenHeaders, isJson) => {
-  const headers = givenHeaders || {}
+const createHeaders = (givenHeaders, isJson, operation, variables, cacheConfig, uploadables) => {
+  let headers
+  if (typeof givenHeaders === 'function') {
+    headers = givenHeaders(operation, variables, cacheConfig, uploadables)
+  } else {
+    headers = givenHeaders || {}
+  }
+
   if (isJson) {
     return {
       'Content-Type': 'application/json',
@@ -29,7 +35,7 @@ export const createFetchQueryBase = ({ path, headers } = {}) => {
   const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
     return fetch(path || '/graphql', {
       method: 'POST',
-      headers: createHeaders(headers, !uploadables),
+      headers: createHeaders(headers, !uploadables, operation, variables, cacheConfig, uploadables),
       body: createBody(operation.text, variables, uploadables)
     }).then(response => response.json())
   }

@@ -184,7 +184,7 @@ const environment = createEnvironment(fetchQuery)
 Creates a function that you can pass to Relay's [`Network.create`](https://facebook.github.io/relay/docs/network-layer.html) to fetch your data. Posts JSON unless uploadables are present, in which case it posts [`FormData`](https://developer.mozilla.org/en-US/docs/Web/API/FormData). It can be called with no arguments or with a config object with some or all of the following:
 
 - `path` - A string of where to query data from. Defaults to `'/graphql'`
-- `headers` - An object containing whatever headers you need to send to the server. Adds `'Content-Type': 'application/json'` when applicable.
+- `headers` - An object containing whatever headers you need to send to the server or a function that takes `operation`, `variables`, `cacheConfig`, and `uploadables` and returns an object of headers. Adds `'Content-Type': 'application/json'` when applicable.
 - `cache` - A [`QueryResponseCache`](https://github.com/facebook/relay/commit/00c7e90b4b928607c4db43cf02161e29e6df3800) from `'relay-runtime'` (or something with the same interface). Clears the cache whenever a mutation is sent and caches all requests that don't have errors.
 
 ```js
