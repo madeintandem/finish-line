@@ -14,7 +14,9 @@ export class RelayRenderer extends Component {
   }
 
   static contextTypes = {
-    relayEnvironment: PropTypes.any.isRequired
+    relayEnvironment: PropTypes.shape({
+      current: PropTypes.any.isRequired
+    }).isRequired
   }
 
   state = {
@@ -40,7 +42,7 @@ export class RelayRenderer extends Component {
     return <QueryRenderer
       key={this.state.queryRendererKey}
       query={query}
-      environment={relayEnvironment}
+      environment={relayEnvironment.current}
       variables={variables}
       render={({ error, props }) => {
         if (render) {

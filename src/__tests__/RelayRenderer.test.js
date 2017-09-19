@@ -9,7 +9,9 @@ jest.mock('react-relay', () => {
 })
 
 const mockContext = () => ({
-  relayEnvironment: 'relay-environment'
+  relayEnvironment: {
+    current: 'relay-environment'
+  }
 })
 
 describe('Basic QueryRenderer props', () => {
