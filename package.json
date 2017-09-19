@@ -12,6 +12,7 @@
     "RelayEnvironmentProvider.js",
     "RelayRenderer.js",
     "relayRendererFactory.js",
+    "warn.js",
     "withRelayEnvironment.js"
   ],
   "babel": {
