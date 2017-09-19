@@ -305,13 +305,30 @@ It accepts a `wrappedComponentRef` `prop` that will provide a [`ref`](https://fa
 Also, all `static` functions on the wrapped component are hoisted up to the wrapper for convenience.
 
 ```js
+import React, { Component } from 'react'
 import {
   withRelayEnvironment,
   RelayEnvironmentProvider,
   relayRendererFactory
 } from 'finish-line'
-import { MyComponent } from './MyComponent'
 
+class MyComponent extends Component {
+  render () {
+    const { relayEnvironment } = this.props
+
+    return <div>
+      <h2>Example!</h2>
+
+      <button onClick={() => relayEnvironment.commitMutation({ mutationExample: 'config' })}>
+        Mutate!
+      </button>
+
+      <button onClick={relayEnvironment.refresh}>
+        Reset!
+      </button>
+    </div>
+  }
+}
 const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 
 const headers = { Authorization: 'Bearer 1234567890' }
