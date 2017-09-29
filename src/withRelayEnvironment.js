@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import hoistNonReactStatics from 'hoist-non-react-statics'
-import { RelayEnvironmentProvider } from './RelayEnvironmentProvider'
+import { RelayEnvironment } from './RelayEnvironment'
 
 export const withRelayEnvironment = (GivenComponent) => {
   class NewComponent extends Component {
@@ -9,12 +9,14 @@ export const withRelayEnvironment = (GivenComponent) => {
       wrappedComponentRef: PropTypes.func
     }
 
-    static contextTypes = RelayEnvironmentProvider.childContextTypes
-
     render () {
-      const { props, context } = this
-      const { wrappedComponentRef, ...otherProps } = props
-      return <GivenComponent ref={wrappedComponentRef} {...context} {...otherProps} />
+      const { wrappedComponentRef, ...otherProps } = this.props
+
+      return <RelayEnvironment>
+        {relayEnvironment =>
+          <GivenComponent ref={wrappedComponentRef} relayEnvironment={relayEnvironment} {...otherProps} />
+        }
+      </RelayEnvironment>
     }
   }
 

@@ -5,17 +5,21 @@ exports[`wrappedComponentRef does not pass the wrapped component ref to the wrap
   create={[Function]}
 >
   <withRelayEnvironment(Dummy)
+    foo="bar"
     wrappedComponentRef={[Function]}
   >
-    <Dummy
-      relayEnvironment={
-        Object {
-          "commitMutation": [Function],
-          "current": 1,
-          "refresh": [Function],
+    <RelayEnvironment>
+      <Dummy
+        foo="bar"
+        relayEnvironment={
+          Object {
+            "commitMutation": [Function],
+            "current": 1,
+            "refresh": [Function],
+          }
         }
-      }
-    />
+      />
+    </RelayEnvironment>
   </withRelayEnvironment(Dummy)>
 </RelayEnvironmentProvider>
 `;

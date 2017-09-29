@@ -67,7 +67,7 @@ describe('wrappedComponentRef', () => {
     }
     const Wrapped = withRelayEnvironment(Dummy)
     const subject = mount(<RelayEnvironmentProvider create={() => 1}>
-      <Wrapped wrappedComponentRef={() => 'hi'} />
+      <Wrapped wrappedComponentRef={() => 'hi'} foo='bar' />
     </RelayEnvironmentProvider>)
     expect(subject).toMatchSnapshot()
   })

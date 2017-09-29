@@ -1,6 +1,7 @@
 export { createEnvironment } from './createEnvironment'
 export { createFetchQuery } from './createFetchQuery'
 export { RelayEnvironmentProvider } from './RelayEnvironmentProvider'
+export { RelayEnvironment } from './RelayEnvironment'
 export { RelayRenderer } from './RelayRenderer'
 export { relayRendererFactory } from './relayRendererFactory'
 export { withRelayEnvironment } from './withRelayEnvironment'
