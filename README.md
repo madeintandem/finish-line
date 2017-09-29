@@ -1,5 +1,7 @@
 # Finish Line
 
+[![npm version](https://badge.fury.io/js/finish-line.svg)](https://badge.fury.io/js/finish-line)
+
 Handy [React](https://facebook.github.io/react/) components and functions to cut down on some of the boiler plate in [Relay Modern](https://facebook.github.io/relay/) apps. Most of the functionality is around managing the Relay [Environment](https://facebook.github.io/relay/docs/relay-environment.html).
 
 ## Contents
