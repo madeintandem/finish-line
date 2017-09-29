@@ -2,6 +2,7 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { RelayRenderer } from '../RelayRenderer'
+import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { warn } from '../warn'
 
 jest.mock('react-relay', () => {
@@ -16,8 +17,15 @@ jest.mock('../warn', () => {
 
 const mockContext = () => ({
   relayEnvironment: {
-    current: 'relay-environment'
+    commitMutation: jest.fn(),
+    current: 'relay-environment',
+    refresh: jest.fn()
   }
+})
+
+const contextOptions = () => ({
+  childContextTypes: RelayEnvironmentProvider.childContextTypes,
+  context: mockContext()
 })
 
 describe('Basic QueryRenderer props', () => {
@@ -34,7 +42,7 @@ describe('Basic QueryRenderer props', () => {
       loading={LoadingDummy}
       error={ErrorDummy}
       render={renderDummy}
-    />, { context: mockContext() })
+    />, contextOptions())
     expect(subject).toMatchSnapshot()
   })
 })
@@ -50,7 +58,7 @@ describe('render passed to QueryRenderer', () => {
       query='query'
       variables={{ some: 'variables' }}
       {...props}
-    />, { context: mockContext() })
+    />, contextOptions())
 
     return subject.find('QueryRenderer').props().render(renderArg)
   }
@@ -114,16 +122,16 @@ describe('render passed to QueryRenderer', () => {
 })
 
 describe('#refreshRenderer', () => {
-  it('increments the queryRendererKey that is applied to the query renderer', () => {
-    const subject = shallow(<RelayRenderer query='query' />, { context: mockContext() })
-    expect(subject).toHaveState('queryRendererKey', 1)
-    expect(subject.find('QueryRenderer').key()).toEqual('1')
+  it('increments the childKey that is applied to the direct descendant', () => {
+    const subject = shallow(<RelayRenderer query='query' />, contextOptions())
+    expect(subject).toHaveState('childKey', 1)
+    expect(subject.find('RelayEnvironment').key()).toEqual('1')
     subject.instance().refreshRenderer()
-    expect(subject).toHaveState('queryRendererKey', 2)
-    expect(subject.find('QueryRenderer').key()).toEqual('2')
+    expect(subject).toHaveState('childKey', 2)
+    expect(subject.find('RelayEnvironment').key()).toEqual('2')
     subject.instance().refreshRenderer()
-    expect(subject).toHaveState('queryRendererKey', 3)
-    expect(subject.find('QueryRenderer').key()).toEqual('3')
+    expect(subject).toHaveState('childKey', 3)
+    expect(subject.find('RelayEnvironment').key()).toEqual('3')
   })
 })
 
@@ -134,7 +142,7 @@ describe('#componentWillMount', () => {
         query='query'
         render={() => null}
         container={() => null}
-      />, { context: mockContext() })
+      />, contextOptions())
       expect(warn).toHaveBeenCalledWith(true, 'RelayRenderer was rendered with a `render` prop and `container`, `error`, and/or `loading` props as well. Passing `render` causes those other props to have no affect.')
     })
   })
@@ -144,7 +152,7 @@ describe('#componentWillMount', () => {
       shallow(<RelayRenderer
         query='query'
         render={() => null}
-      />, { context: mockContext() })
+      />, contextOptions())
       expect(warn).toHaveBeenCalledWith(false, expect.anything())
     })
   })
@@ -154,7 +162,7 @@ describe('#componentWillMount', () => {
       shallow(<RelayRenderer
         query='query'
         container={() => null}
-      />, { context: mockContext() })
+      />, contextOptions())
       expect(warn).toHaveBeenCalledWith(false, expect.anything())
     })
   })

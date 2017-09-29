@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { QueryRenderer } from 'react-relay'
 import PropTypes from 'prop-types'
 import { warn } from './warn'
+import { RelayEnvironment } from './RelayEnvironment'
 
 export class RelayRenderer extends Component {
   static propTypes = {
@@ -9,19 +10,12 @@ export class RelayRenderer extends Component {
     error: PropTypes.any,
     loading: PropTypes.any,
     query: PropTypes.any.isRequired,
-    refreshRelayEnvironment: PropTypes.any,
     render: PropTypes.func,
     variables: PropTypes.object
   }
 
-  static contextTypes = {
-    relayEnvironment: PropTypes.shape({
-      current: PropTypes.any.isRequired
-    }).isRequired
-  }
-
   state = {
-    queryRendererKey: 1
+    childKey: 1
   }
 
   componentWillMount () {
@@ -34,7 +28,7 @@ export class RelayRenderer extends Component {
   }
 
   refreshRenderer = () => {
-    this.setState({ queryRendererKey: this.state.queryRendererKey + 1 })
+    this.setState({ childKey: this.state.childKey + 1 })
   }
 
   render () {
@@ -47,29 +41,31 @@ export class RelayRenderer extends Component {
       variables,
       ...otherProps
     } = this.props
-    const { relayEnvironment } = this.context
 
-    return <QueryRenderer
-      key={this.state.queryRendererKey}
-      query={query}
-      environment={relayEnvironment.current}
-      variables={variables}
-      render={({ error, props }) => {
-        if (render) {
-          const combinedProps = { ...otherProps, ...props }
-          return render({ error, props: combinedProps })
-        } else if (error && ErrorComponent) {
-          return <ErrorComponent error={error} refreshRenderer={this.refreshRenderer} {...otherProps} />
-        } else if (error) {
-          return null
-        } else if (props) {
-          return <Container {...otherProps} {...props} />
-        } else if (LoadingComponent) {
-          return <LoadingComponent {...otherProps} />
-        } else {
-          return null
-        }
-      }}
-    />
+    return <RelayEnvironment key={this.state.childKey}>
+      {(relayEnvironment) => (
+        <QueryRenderer
+          query={query}
+          environment={relayEnvironment.current}
+          variables={variables}
+          render={({ error, props }) => {
+            if (render) {
+              const combinedProps = { ...otherProps, ...props }
+              return render({ error, props: combinedProps })
+            } else if (error && ErrorComponent) {
+              return <ErrorComponent error={error} refreshRenderer={this.refreshRenderer} {...otherProps} />
+            } else if (error) {
+              return null
+            } else if (props) {
+              return <Container {...otherProps} {...props} />
+            } else if (LoadingComponent) {
+              return <LoadingComponent {...otherProps} />
+            } else {
+              return null
+            }
+          }}
+        />
+      )}
+    </RelayEnvironment>
   }
 }

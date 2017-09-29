@@ -13,15 +13,17 @@ exports[`Basic QueryRenderer props passes the appropriate props through to the Q
     }
   }
 >
-  <QueryRenderer
-    environment="relay-environment"
-    query="query"
-    render={[Function]}
-    variables={
-      Object {
-        "some": "variables",
+  <RelayEnvironment>
+    <QueryRenderer
+      environment="relay-environment"
+      query="query"
+      render={[Function]}
+      variables={
+        Object {
+          "some": "variables",
+        }
       }
-    }
-  />
+    />
+  </RelayEnvironment>
 </RelayRenderer>
 `;
