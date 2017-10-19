@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import { buildFetchQuery } from '../index'
+import { createFetchQuery } from '../index'
 import { createFetchQueryBase } from '../createFetchQueryBase'
 import { createFetchQueryWithCache } from '../createFetchQueryWithCache'
 
@@ -15,7 +15,7 @@ jest.mock('../createFetchQueryWithCache', () => {
 
 describe('without arguments', () => {
   it('uses the createFetchQueryBase', () => {
-    const result = buildFetchQuery()
+    const result = createFetchQuery()
 
     expect(createFetchQueryBase).toHaveBeenCalledWith({})
     expect(createFetchQueryWithCache).not.toHaveBeenCalled()
@@ -26,7 +26,7 @@ describe('without arguments', () => {
 describe('without a given cache', () => {
   it('uses the createFetchQueryBase', () => {
     const args = { cache: null, headers: { a: 'header' } }
-    const result = buildFetchQuery(args)
+    const result = createFetchQuery(args)
 
     expect(createFetchQueryBase).toHaveBeenCalledWith(args)
     expect(createFetchQueryWithCache).not.toHaveBeenCalled()
@@ -37,7 +37,7 @@ describe('without a given cache', () => {
 describe('with a given cache', () => {
   it('uses the createFetchQueryWithCache', () => {
     const args = { cache: 'a cache', headers: { a: 'header' } }
-    const result = buildFetchQuery(args)
+    const result = createFetchQuery(args)
 
     expect(createFetchQueryWithCache).toHaveBeenCalledWith(args)
     expect(createFetchQueryBase).not.toHaveBeenCalled()
