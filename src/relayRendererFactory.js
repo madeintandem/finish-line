@@ -8,8 +8,8 @@ export const relayRendererFactory = (environmentProvider) => {
   let id = 1
   const customRendererCache = new Map()
 
-  const refreshRelayEnvironment = () => {
-    currentEnvironment = environmentProvider()
+  const refreshRelayEnvironment = (...args) => {
+    currentEnvironment = environmentProvider(...args)
     customRendererCache.forEach((callback, _key) => callback(currentEnvironment))
   }
 

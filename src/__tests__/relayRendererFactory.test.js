@@ -103,7 +103,7 @@ describe('refreshing the relay environment and the component lifecycle', () => {
 
   beforeEach(() => {
     let count = 1
-    counter = () => count++
+    counter = jest.fn(() => count++)
     CustomRelayRenderer = relayRendererFactory(counter)
     subject = shallow(<CustomRelayRenderer query='query' />)
     refreshRelayEnvironment = subject.instance().getChildContext().relayEnvironment.refresh
@@ -131,6 +131,11 @@ describe('refreshing the relay environment and the component lifecycle', () => {
     refreshRelayEnvironment()
     expect(subject).toHaveState('environment', 5)
     expect(other).toHaveState('environment', 2)
+  })
+
+  it('passes through arguments to the environment creating function', () => {
+    refreshRelayEnvironment(1, 2, 3)
+    expect(counter).toHaveBeenCalledWith(1, 2, 3)
   })
 })
 
