@@ -34,9 +34,9 @@ export class RelayEnvironmentProvider extends Component {
     commitMutation(this.state.environment, arg)
   }
 
-  refresh = (callback) => {
-    const environment = this.props.create()
-    this.setState({ environment }, callback)
+  refresh = (...args) => {
+    const environment = this.props.create(...args)
+    this.setState({ environment })
   }
 
   render () {

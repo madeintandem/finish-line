@@ -74,11 +74,11 @@ describe('#commitMutation', () => {
 })
 
 describe('#refresh', () => {
-  let count
+  let counter
 
   beforeEach(() => {
-    count = 1
-    const counter = () => count++
+    let count = 1
+    counter = jest.fn(() => count++)
     loadSubject({ create: counter })
   })
 
@@ -88,10 +88,9 @@ describe('#refresh', () => {
     expect(subject.state().environment).toEqual(2)
   })
 
-  it('passes through the callback to set state', () => {
-    const callback = jest.fn()
-    subject.instance().refresh(callback)
-    expect(callback).toHaveBeenCalled()
+  it('passes through arguments', () => {
+    subject.instance().refresh(1, 2, 3)
+    expect(counter).toHaveBeenCalledWith(1, 2, 3)
   })
 })
 
