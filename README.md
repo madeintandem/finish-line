@@ -12,6 +12,7 @@ Handy [React](https://facebook.github.io/react/) components and functions to cut
 - [API](#api)
   - [`createEnvironment`](#createenvironment)
   - [`createFetchQuery`](#createfetchquery)
+  - [`RelayEnvironment`](#relayenvironment)
   - [`RelayEnvironmentProvider`](#relayenvironmentprovider)
   - [`RelayRenderer`](#relayrenderer)
   - [`relayRendererFactory`](#relayrendererfactory)
@@ -206,6 +207,43 @@ const fetchQuery = createFetchQuery({ path, headers, cache})
 const network = Network.create(fetchQuery)
 ```
 
+### `RelayEnvironment`
+
+A component that provides access to the Relay `Environment` instance and the same helper functions as [`withRelayEnvironment` (check it out for details).](#withrelayenvironment) `withRelayEnvironment` is a higher order component while `RelayEnvironment` is a regular component that takes a function for its `children` prop and renders the result of passing it the Relay `Environment`.
+
+```js
+import {
+  createEnvironment
+  RelayEnvironmentProvider,
+  RelayEnvironment
+} from 'finish-line'
+
+// ...
+
+<RelayEnvironmentProvider create={createEnvironment}>
+  <RelayEnvironment>
+    {relayEnvironment => (
+      <div>
+        <h2>Example!</h2>
+
+        <p>
+          The current environment looks like {JSON.stringify(relayEnvironment.current)}
+        </p>
+
+        <button onClick={() => relayEnvironment.commitMutation({ mutationExample: 'config' })}>
+          Mutate!
+        </button>
+
+        <button onClick={() => relayEnvironment.refresh({ example: 'argument' })}>
+          Reset!
+        </button>
+      </div>
+    )}
+  </RelayEnvironment>
+</RelayEnvironmentProvider>
+
+```
+
 ### `RelayEnvironmentProvider`
 
 A component that helps manage your application's Relay `Environment`. It takes a `create` `prop` which is a function that returns a new instance of a Relay `Environment`. It provides a few pieces of helper `context` that you can access through Finish Line's `withRelayEnvironment` helper (check out its documentation for more). Finish Line's `RelayRenderer` must be rendered inside of `RelayEnvironmentProvider` or something that provides similar `context`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
@@ -320,6 +358,10 @@ class MyComponent extends Component {
 
     return <div>
       <h2>Example!</h2>
+
+      <p>
+        The current environment looks like {JSON.stringify(relayEnvironment.current)}
+      </p>
 
       <button onClick={() => relayEnvironment.commitMutation({ mutationExample: 'config' })}>
         Mutate!
