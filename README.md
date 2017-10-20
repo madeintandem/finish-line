@@ -338,7 +338,7 @@ Wraps your components to provides a single `prop` of `relayEnvironment` which co
 
 - `commitMutation` - Relay's [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html) function wrapped up so you don't have to pass the `environment` in.
 - `current` - The current instance of Relay's [`environment`](https://facebook.github.io/relay/docs/relay-environment.html). This comes from the `create` function that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory). Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
-- `refresh` - A function that will call the `create` function that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory) to replace the current `environment`. This is handy when someone signs in or out of your application. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result. If called by a component rendered by a custom `RelayRenderer` (via `relayRendererFactory`), all custom `RelayRenderer`s that are rendered will update.
+- `refresh` - A function that will call the `create` function that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory) to replace the current `environment`. This is handy when someone signs in or out of your application. You can also pass arguments through to your `createEnvironment` function if you'd like. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result. If called by a component rendered by a custom `RelayRenderer` (via `relayRendererFactory`), all custom `RelayRenderer`s that are rendered will update.
 
 It accepts a `wrappedComponentRef` `prop` that will provide a [`ref`](https://facebook.github.io/react/docs/refs-and-the-dom.html) of the wrapped component when rendered.
 
@@ -367,7 +367,7 @@ class MyComponent extends Component {
         Mutate!
       </button>
 
-      <button onClick={relayEnvironment.refresh}>
+      <button onClick={() => relayEnvironment.refresh('an argument for my environment creating function')}>
         Reset!
       </button>
     </div>
