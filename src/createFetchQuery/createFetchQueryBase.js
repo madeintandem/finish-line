@@ -31,10 +31,11 @@ const createBody = (query, variables, uploadables) => {
   }
 }
 
-export const createFetchQueryBase = ({ path, headers } = {}) => {
+export const createFetchQueryBase = ({ path, headers, credentials } = {}) => {
   const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
     return fetch(path || '/graphql', {
       method: 'POST',
+      credentials: credentials || 'omit',
       headers: createHeaders(headers, !uploadables, operation, variables, cacheConfig, uploadables),
       body: createBody(operation.text, variables, uploadables)
     }).then(response => response.json())

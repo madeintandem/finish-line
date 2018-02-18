@@ -21,6 +21,7 @@ describe('createFetchQueryBase', () => {
 
     expect(fetch).toHaveBeenCalledWith('/graphql', {
       method: 'POST',
+      credentials: 'omit',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ query, variables })
     })
@@ -37,6 +38,7 @@ describe('createFetchQueryBase', () => {
 
     expect(fetch).toHaveBeenCalledWith(expect.anything(), {
       method: 'POST',
+      credentials: 'omit',
       headers: {},
       body: formData
     })
@@ -57,10 +59,25 @@ describe('createFetchQueryBase', () => {
 
     expect(fetch).toHaveBeenCalledWith(expect.anything(), {
       method: 'POST',
+      credentials: 'omit',
       headers: {
         'Content-Type': 'application/json',
         other: 'headers'
       },
+      body: JSON.stringify({ query, variables })
+    })
+  })
+
+  it('accepts a "credentials" parameter', () => {
+    const credentials = 'same-origin'
+    const subject = createFetchQueryBase({ credentials })
+    subject(operation, variables)
+    expect(fetch).toHaveBeenCalledWith(expect.anything(), {
+      credentials,
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'POST',
       body: JSON.stringify({ query, variables })
     })
   })
@@ -75,6 +92,7 @@ describe('createFetchQueryBase', () => {
     expect(headers).toHaveBeenCalledWith(operation, variables, cacheConfig, uploadables)
     expect(fetch).toHaveBeenCalledWith(expect.anything(), {
       method: 'POST',
+      credentials: 'omit',
       headers: {
         'Content-Type': 'application/json',
         my: 'header'

@@ -189,6 +189,7 @@ Creates a function that you can pass to Relay's [`Network.create`](https://faceb
 - `path` - A string of where to query data from. Defaults to `'/graphql'`
 - `headers` - An object containing whatever headers you need to send to the server or a function that takes `operation`, `variables`, `cacheConfig`, and `uploadables` and returns an object of headers. Adds `'Content-Type': 'application/json'` when applicable.
 - `cache` - A [`QueryResponseCache`](https://github.com/facebook/relay/commit/00c7e90b4b928607c4db43cf02161e29e6df3800) from `'relay-runtime'` (or something with the same interface). Clears the cache whenever a mutation is sent and caches all requests that don't have errors.
+- `credentials` - How to handle cookies with the request. Either `'omit'`, `'same-origin'`, or `'include'`. `'omit'` by default.
 
 ```js
 import { QueryResponseCache, Network } from 'relay-runtime'
