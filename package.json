@@ -16,11 +16,6 @@
     "warn.js",
     "withRelayEnvironment.js"
   ],
-  "babel": {
-    "presets": [
-      "./tools/babel-preset"
-    ]
-  },
   "scripts": {
     "build": "node ./tools/build.js",
     "clean:light": "git clean -fdx . -e node_modules",
