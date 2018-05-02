@@ -12,7 +12,6 @@
     "RelayEnvironmentProvider.js",
     "RelayEnvironment.js",
     "RelayRenderer.js",
-    "relayRendererFactory.js",
     "warn.js",
     "withRelayEnvironment.js"
   ],
