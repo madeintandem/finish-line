@@ -1,6 +1,6 @@
 {
   "name": "finish-line",
-  "version": "0.2.3",
+  "version": "0.3.0",
   "description": "Helpful components and tools to build React and Relay applications more quickly and easily",
   "main": "index.js",
   "module": "es/index.js",
