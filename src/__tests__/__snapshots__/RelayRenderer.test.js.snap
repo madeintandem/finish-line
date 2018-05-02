@@ -13,7 +13,9 @@ exports[`Basic QueryRenderer props passes the appropriate props through to the Q
     }
   }
 >
-  <RelayEnvironment>
+  <RelayEnvironment
+    key="1"
+  >
     <QueryRenderer
       environment="relay-environment"
       query="query"

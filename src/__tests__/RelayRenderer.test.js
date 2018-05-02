@@ -125,13 +125,10 @@ describe('#refreshRenderer', () => {
   it('increments the childKey that is applied to the direct descendant', () => {
     const subject = shallow(<RelayRenderer query='query' />, contextOptions())
     expect(subject).toHaveState('childKey', 1)
-    expect(subject.find('RelayEnvironment').key()).toEqual('1')
     subject.instance().refreshRenderer()
     expect(subject).toHaveState('childKey', 2)
-    expect(subject.find('RelayEnvironment').key()).toEqual('2')
     subject.instance().refreshRenderer()
     expect(subject).toHaveState('childKey', 3)
-    expect(subject.find('RelayEnvironment').key()).toEqual('3')
   })
 })
 
