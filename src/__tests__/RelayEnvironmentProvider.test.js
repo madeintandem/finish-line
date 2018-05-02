@@ -36,12 +36,12 @@ describe('default state', () => {
   })
 })
 
-describe('#getChildContext', () => {
+describe('#relayEnvironmentProps', () => {
   let result
 
   beforeEach(() => {
     loadSubject({ create: uniqueId })
-    result = subject.instance().getChildContext().relayEnvironment
+    result = subject.instance().relayEnvironmentProps()
   })
 
   it('has the current environment', () => {
@@ -97,6 +97,6 @@ describe('#refresh', () => {
 describe('#render', () => {
   it('is the children', () => {
     loadSubject({ create: uniqueId })
-    expect(subject.instance().render()).toEqual(<Dummy />)
+    expect(subject).toMatchSnapshot()
   })
 })

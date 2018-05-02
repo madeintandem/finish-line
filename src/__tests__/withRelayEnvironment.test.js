@@ -1,13 +1,18 @@
 /* eslint-env jest */
 import React, { Component } from 'react'
 import { mount } from 'enzyme'
-import { uniqueId } from 'lodash'
-import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { withRelayEnvironment } from '../withRelayEnvironment'
+
+jest.mock('../RelayEnvironmentProvider', () => {
+  const RelayEnvironment = ({ children }) => children({ mocked: 'env' })
+
+  return {
+    RelayEnvironment
+  }
+})
 
 describe('provided props', () => {
   let givenProps
-  let envProvider
 
   const Dummy = withRelayEnvironment((props) => {
     givenProps = props
@@ -15,13 +20,11 @@ describe('provided props', () => {
   })
 
   beforeEach(() => {
-    envProvider = mount(<RelayEnvironmentProvider create={uniqueId}>
-      <Dummy />
-    </RelayEnvironmentProvider>)
+    mount(<Dummy />)
   })
 
   it('is the context from the environment provider', () => {
-    expect(givenProps).toEqual(envProvider.instance().getChildContext())
+    expect(givenProps).toEqual({ relayEnvironment: { mocked: 'env' } })
   })
 })
 
@@ -66,9 +69,7 @@ describe('wrappedComponentRef', () => {
       render () { return null }
     }
     const Wrapped = withRelayEnvironment(Dummy)
-    const subject = mount(<RelayEnvironmentProvider create={() => 1}>
-      <Wrapped wrappedComponentRef={() => 'hi'} foo='bar' />
-    </RelayEnvironmentProvider>)
+    const subject = mount(<Wrapped wrappedComponentRef={() => 'hi'} foo='bar' />)
     expect(subject).toMatchSnapshot()
   })
 })

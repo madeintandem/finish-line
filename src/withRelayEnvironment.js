@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import hoistNonReactStatics from 'hoist-non-react-statics'
-import { RelayEnvironment } from './RelayEnvironment'
+import { RelayEnvironment } from './RelayEnvironmentProvider'
 
 export const withRelayEnvironment = (GivenComponent) => {
   class NewComponent extends Component {

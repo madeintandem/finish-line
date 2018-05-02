@@ -1,25 +1,19 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`wrappedComponentRef does not pass the wrapped component ref to the wrapped component 1`] = `
-<RelayEnvironmentProvider
-  create={[Function]}
+<withRelayEnvironment(Dummy)
+  foo="bar"
+  wrappedComponentRef={[Function]}
 >
-  <withRelayEnvironment(Dummy)
-    foo="bar"
-    wrappedComponentRef={[Function]}
-  >
-    <RelayEnvironment>
-      <Dummy
-        foo="bar"
-        relayEnvironment={
-          Object {
-            "commitMutation": [Function],
-            "current": 1,
-            "refresh": [Function],
-          }
+  <RelayEnvironment>
+    <Dummy
+      foo="bar"
+      relayEnvironment={
+        Object {
+          "mocked": "env",
         }
-      />
-    </RelayEnvironment>
-  </withRelayEnvironment(Dummy)>
-</RelayEnvironmentProvider>
+      }
+    />
+  </RelayEnvironment>
+</withRelayEnvironment(Dummy)>
 `;

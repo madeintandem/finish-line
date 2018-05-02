@@ -2,7 +2,6 @@
 import React from 'react'
 import { mount, shallow } from 'enzyme'
 import { RelayRenderer } from '../RelayRenderer'
-import { RelayEnvironmentProvider } from '../RelayEnvironmentProvider'
 import { warn } from '../warn'
 
 jest.mock('react-relay', () => {
@@ -15,17 +14,16 @@ jest.mock('../warn', () => {
   return { warn }
 })
 
-const mockContext = () => ({
-  relayEnvironment: {
+jest.mock('../RelayEnvironmentProvider', () => {
+  const RelayEnvironment = ({ children }) => children({
     commitMutation: jest.fn(),
     current: 'relay-environment',
     refresh: jest.fn()
-  }
-})
+  })
 
-const contextOptions = () => ({
-  childContextTypes: RelayEnvironmentProvider.childContextTypes,
-  context: mockContext()
+  return {
+    RelayEnvironment
+  }
 })
 
 describe('Basic QueryRenderer props', () => {
@@ -42,7 +40,7 @@ describe('Basic QueryRenderer props', () => {
       loading={LoadingDummy}
       error={ErrorDummy}
       render={renderDummy}
-    />, contextOptions())
+    />)
     expect(subject).toMatchSnapshot()
   })
 })
@@ -58,7 +56,7 @@ describe('render passed to QueryRenderer', () => {
       query='query'
       variables={{ some: 'variables' }}
       {...props}
-    />, contextOptions())
+    />)
 
     return subject.find('QueryRenderer').props().render(renderArg)
   }
@@ -123,7 +121,7 @@ describe('render passed to QueryRenderer', () => {
 
 describe('#refreshRenderer', () => {
   it('increments the childKey that is applied to the direct descendant', () => {
-    const subject = shallow(<RelayRenderer query='query' />, contextOptions())
+    const subject = shallow(<RelayRenderer query='query' />)
     expect(subject).toHaveState('childKey', 1)
     subject.instance().refreshRenderer()
     expect(subject).toHaveState('childKey', 2)
@@ -139,7 +137,7 @@ describe('#componentWillMount', () => {
         query='query'
         render={() => null}
         container={() => null}
-      />, contextOptions())
+      />)
       expect(warn).toHaveBeenCalledWith(true, 'RelayRenderer was rendered with a `render` prop and `container`, `error`, and/or `loading` props as well. Passing `render` causes those other props to have no affect.')
     })
   })
@@ -149,7 +147,7 @@ describe('#componentWillMount', () => {
       shallow(<RelayRenderer
         query='query'
         render={() => null}
-      />, contextOptions())
+      />)
       expect(warn).toHaveBeenCalledWith(false, expect.anything())
     })
   })
@@ -159,7 +157,7 @@ describe('#componentWillMount', () => {
       shallow(<RelayRenderer
         query='query'
         container={() => null}
-      />, contextOptions())
+      />)
       expect(warn).toHaveBeenCalledWith(false, expect.anything())
     })
   })

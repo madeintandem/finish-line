@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`#render is the children 1`] = `
+<[object Object]
+  value={
+    Object {
+      "commitMutation": [Function],
+      "current": "5",
+      "refresh": [Function],
+    }
+  }
+>
+  <Dummy />
+</[object Object]>
+`;

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { QueryRenderer } from 'react-relay'
 import PropTypes from 'prop-types'
 import { warn } from './warn'
-import { RelayEnvironment } from './RelayEnvironment'
+import { RelayEnvironment } from './RelayEnvironmentProvider'
 
 export class RelayRenderer extends Component {
   static propTypes = {

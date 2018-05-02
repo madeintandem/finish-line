@@ -1,6 +1,10 @@
-import { Component } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { commitMutation } from 'react-relay'
+
+const { Provider, Consumer } = React.createContext()
+
+export const RelayEnvironment = Consumer
 
 export class RelayEnvironmentProvider extends Component {
   static propTypes = {
@@ -8,25 +12,15 @@ export class RelayEnvironmentProvider extends Component {
     children: PropTypes.any.isRequired
   }
 
-  static childContextTypes = {
-    relayEnvironment: PropTypes.shape({
-      commitMutation: PropTypes.func.isRequired,
-      current: PropTypes.any.isRequired,
-      refresh: PropTypes.func.isRequired
-    }).isRequired
-  }
-
   state = {
     environment: this.props.create()
   }
 
-  getChildContext () {
+  relayEnvironmentProps = () => {
     return {
-      relayEnvironment: {
-        commitMutation: this.commitMutation,
-        current: this.state.environment,
-        refresh: this.refresh
-      }
+      commitMutation: this.commitMutation,
+      current: this.state.environment,
+      refresh: this.refresh
     }
   }
 
@@ -40,6 +34,8 @@ export class RelayEnvironmentProvider extends Component {
   }
 
   render () {
-    return this.props.children
+    return <Provider value={this.relayEnvironmentProps()}>
+      {this.props.children}
+    </Provider>
   }
 }
