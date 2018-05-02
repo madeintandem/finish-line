@@ -8,14 +8,12 @@ Handy [React](https://facebook.github.io/react/) components and functions to cut
 
 - [Installation](#installation)
 - [Usage](#usage)
-  - [`RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?](#relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
 - [API](#api)
   - [`createEnvironment`](#createenvironment)
   - [`createFetchQuery`](#createfetchquery)
   - [`RelayEnvironment`](#relayenvironment)
   - [`RelayEnvironmentProvider`](#relayenvironmentprovider)
   - [`RelayRenderer`](#relayrenderer)
-  - [`relayRendererFactory`](#relayrendererfactory)
   - [`withRelayEnvironment`](#withrelayenvironment)
 - [License](#license)
 
@@ -75,66 +73,17 @@ const App = () => (
 )
 ```
 
-### `RelayEnvironmentProvider` with `RelayRenderer` or `relayRendererFactory`?
-
-It depends. [`RelayEnvironmentProvider`](#relayenvironmentprovider) with [`RelayRenderer`](#relayrenderer) is a much easier to understand (just wrap your app with `RelayEnvironmentProvider` and use `RelayRenderer` at will), but whenever you [`relayEnvironment.refresh`](#withrelayenvironment) your entire component tree will update. This can make other React patterns tricky, for instance this update could trigger transition animations for navigating between routes [React Router v4](https://reacttraining.com/react-router/).
-
-```js
-import { RelayEnvironmentProvider, RelayRenderer } from 'finish-line'
-
-const App = () => (
-  <div>
-    <RelayRenderer {/* ... */} />
-    <div>
-      <RelayRenderer {/* ... */} />
-    </div>
-  </div>
-)
-
-export default () => (
-  <RelayEnvironmentProvider {/* ... */}>
-    <App />
-  </RelayEnvironmentProvider>
-)
-```
-
-Since [`relayRendererFactory`](#relayrendererfactory) is more self-contained, you can move `relayEnvironment.refresh` updates further down your component tree. The downside is that this is harder to understand and you could end up with warnings from React if they update while nested (you can always use a regular `RelayRenderer` inside your custom one).
-
-```js
-import { relayRendererFactory, RelayRenderer, createEnvironment } from 'finish-line'
-
-const MyRelayRenderer = relayRendererFactory(createEnvironment)
-
-// ...
-
-const MyContainer = (props) => (
-  <div>
-    <h2>This works</h2>
-    <RelayRenderer {/* ... */} />
-  </div>
-)
-
-const App = () => (
-  <div>
-    <MyRelayRenderer container={MyContainer} {/* ... */} />
-    <br />
-    <MyRelayRenderer container={MyContainer} {/* ... */} />
-  </div>
-)
-```
-
 ## API
 
 - [`createEnvironment`](#createenvironment)
 - [`createFetchQuery`](#createfetchquery)
 - [`RelayEnvironmentProvider`](#relayenvironmentprovider)
 - [`RelayRenderer`](#relayrenderer)
-- [`relayRendererFactory`](#relayrendererfactory)
 - [`withRelayEnvironment`](#withrelayenvironment)
 
 ### `createEnvironment`
 
-Creates a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) that you can you can pass to Relay's [`QueryRenderer`](#https://facebook.github.io/relay/docs/query-renderer.html), [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html), etc. It can also be passed to Finish Line's [`RelayRenderer`](#relayrenderer) and [`relayRendererFactory`](#relayrendererfactory).
+Creates a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) that you can you can pass to Relay's [`QueryRenderer`](#https://facebook.github.io/relay/docs/query-renderer.html), [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html), etc. It can also be passed to Finish Line's [`RelayRenderer`](#relayrenderer).
 
 #### with no arguments
 
@@ -247,7 +196,7 @@ import {
 
 ### `RelayEnvironmentProvider`
 
-A component that helps manage your application's Relay `Environment`. It takes a `create` `prop` which is a function that returns a new instance of a Relay `Environment`. It provides a few pieces of helper `context` that you can access through Finish Line's `withRelayEnvironment` helper (check out its documentation for more). Finish Line's `RelayRenderer` must be rendered inside of `RelayEnvironmentProvider` or something that provides similar `context`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
+A component that helps manage your application's Relay `Environment`. It takes a `create` `prop` which is a function that returns a new instance of a Relay `Environment`. It provides a few pieces of helper `context` that you can access through Finish Line's `withRelayEnvironment` helper (check out its documentation for more). Finish Line's `RelayRenderer` must be rendered inside of `RelayEnvironmentProvider` or something that provides similar `context`. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer`
 
 ```js
 import {
@@ -281,8 +230,6 @@ const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 - `render` - Works the same as `QueryRenderer`'s `render` `prop`, but is called with all of the `props` passed to the `RelayRenderer` along with whatever `props` Relay provides. If passed, the `error` and `loading` props are ignored.
 - `variables` - Variables for your `query`.
 
- [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
-
 ```js
 import { graphql } from 'react-relay'
 import { RelayRenderer } from 'finish-line'
@@ -311,35 +258,13 @@ const Loading = (props) => (
 
 ```
 
-### `relayRendererFactory`
-
-Creates a component that behaves like [`RelayRenderer`](#relayrenderer) but does not need to be rendered inside a [`RelayEnvironmentProvider`](#relayenvironmentprovider). All instances of the created component class will share the same environment and stay in sync with one another. [`withRelayEnvironment`](#withrelayenvironment) will work as it normally does for anything rendered by your factory built `RelayRenderer`. It takes a function that returns a new [Relay `Environment`](https://facebook.github.io/relay/docs/relay-environment.html) instance. [Here is a comparison of the `RelayEnvironmentProvider` with `RelayRenderer` and `relayRendererFactory`.](relayenvironmentprovider-with-relayrenderer-or-relayrendererfactory)
-
-```js
-import { relayRendererFactory, createEnvironment, withRelayEnvironment } from 'finish-line'
-import { MyComponent } from './MyComponent'
-
-const headers = { Authorization: 'Bearer 1234567890' }
-const newAppEnvironment = () => createEnvironment({ headers })
-const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
-
-const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
-// ...
-
-<div>
-  <CustomRelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
-  <br />
-  <CustomRelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
-</div>
-```
-
 ### `withRelayEnvironment`
 
 Wraps your components to provides a single `prop` of `relayEnvironment` which contains the following:
 
 - `commitMutation` - Relay's [`commitMutation`](https://facebook.github.io/relay/docs/mutations.html) function wrapped up so you don't have to pass the `environment` in.
-- `current` - The current instance of Relay's [`environment`](https://facebook.github.io/relay/docs/relay-environment.html). This comes from the `create` function that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory). Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
-- `refresh` - A function that will call the `create` function that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) or [`relayRendererFactory`](#relayrendererfactory) to replace the current `environment`. This is handy when someone signs in or out of your application. You can also pass arguments through to your `createEnvironment` function if you'd like. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result. If called by a component rendered by a custom `RelayRenderer` (via `relayRendererFactory`), all custom `RelayRenderer`s that are rendered will update.
+- `current` - The current instance of Relay's [`environment`](https://facebook.github.io/relay/docs/relay-environment.html). This comes from the `create` function that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider). Generally you won't need to actually use this `prop` because Finish Line wraps Relay up so you don't have to worry about it.
+- `refresh` - A function that will call the `create` function that was given to [`RelayEnvironmentProvider`](#relayenvironmentprovider) to replace the current `environment`. This is handy when someone signs in or out of your application. You can also pass arguments through to your `createEnvironment` function if you'd like. If called in a `RelayEnvironmentProvider`, all of the `RelayEnvironmentProvider`'s children will update as a result.
 
 It accepts a `wrappedComponentRef` `prop` that will provide a [`ref`](https://facebook.github.io/react/docs/refs-and-the-dom.html) of the wrapped component when rendered.
 
@@ -347,11 +272,7 @@ Also, all `static` functions on the wrapped component are hoisted up to the wrap
 
 ```js
 import React, { Component } from 'react'
-import {
-  withRelayEnvironment,
-  RelayEnvironmentProvider,
-  relayRendererFactory
-} from 'finish-line'
+import { withRelayEnvironment, RelayEnvironmentProvider } from 'finish-line'
 
 class MyComponent extends Component {
   render () {
@@ -376,18 +297,12 @@ class MyComponent extends Component {
 }
 const MyComponentWithRelayEnvironment = withRelayEnvironment(MyComponent)
 
-const headers = { Authorization: 'Bearer 1234567890' }
-const newAppEnvironment = () => createEnvironment({ headers })
-const CustomRelayRenderer = relayRendererFactory(newAppEnvironment)
-
 // ...
 
 <div>
   <RelayEnvironmentProvider create={newAppEnvironment}>
     <RelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
   </RelayEnvironmentProvider>
-  <br />
-  <CustomRelayRenderer container={MyComponentWithRelayEnvironment} {/* ... */} />
 </div>
 ```
 
