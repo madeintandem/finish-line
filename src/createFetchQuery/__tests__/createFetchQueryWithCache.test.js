@@ -22,7 +22,7 @@ let response
 beforeEach(() => {
   cache = new QueryResponseCache({ size: 250, ttl: 5 * 60 * 1000 })
   response = { data: { foo: 'bar' } }
-  fetch.mockResponse(JSON.stringify(response))
+  fetch.mockResponse(JSON.stringify(response), { status: 200 })
   query = 'some query'
   operation = { text: query, name: 'SomeOperation' }
   variables = { some: 'variables' }
@@ -68,20 +68,20 @@ it('makes the fetch and returns the result', async () => {
 it('caches the result when successful', async () => {
   const subject = createFetchQueryWithCache({ cache })
 
-  fetch.mockResponse(JSON.stringify(response))
+  fetch.mockResponse(JSON.stringify(response), { status: 200 })
   await subject(operation, variables)
   expect(cache.get(operation.name, variables)).toEqual(response)
 
   operation.name = 'different'
   response.data = null
-  fetch.mockResponse(JSON.stringify(response))
+  fetch.mockResponse(JSON.stringify(response), { status: 200 })
   await subject(operation, variables)
   expect(cache.get(operation.name, variables)).toEqual(null)
 
   operation.name = 'another different name'
   response.data = { foo: 'bar' }
   response.errors = { an: 'error' }
-  fetch.mockResponse(JSON.stringify(response))
+  fetch.mockResponse(JSON.stringify(response), { status: 200 })
   await subject(operation, variables)
   expect(cache.get(operation.name, variables)).toEqual(null)
 })

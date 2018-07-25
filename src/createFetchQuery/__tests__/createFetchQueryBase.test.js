@@ -9,7 +9,7 @@ describe('createFetchQueryBase', () => {
 
   beforeEach(() => {
     response = { foo: 'bar' }
-    fetch.mockResponse(JSON.stringify(response))
+    fetch.mockResponse(JSON.stringify(response), { status: 200 })
     query = 'some query'
     operation = { text: query }
     variables = { some: 'variables' }
@@ -105,5 +105,26 @@ describe('createFetchQueryBase', () => {
     const subject = createFetchQueryBase()
     const result = await subject(operation, variables)
     expect(result).toEqual(response)
+  })
+
+  it('rejects the promise when it is not a 2XX status response', async () => {
+    jest.spyOn(console, 'error').mockImplementation(() => 'mocked')
+    fetch.mockResponse(JSON.stringify(response), { status: 401 })
+    const subject = createFetchQueryBase()
+    const result = await subject(operation, variables)
+    expect(result.status).toEqual(401)
+    expect(console.error).toHaveBeenCalled()
+  })
+
+  it('accepts a "catch" argument for when the promise fails', async () => {
+    fetch.mockResponse(JSON.stringify(response), { status: 401 })
+    const catchCallback = jest.fn(() => {
+      return 'caught'
+    })
+
+    const subject = createFetchQueryBase({ catch: catchCallback })
+    const result = subject(operation, variables)
+    expect(await result).toEqual('caught')
+    expect(catchCallback).toHaveBeenCalled()
   })
 })

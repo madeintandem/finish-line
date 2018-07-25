@@ -31,14 +31,23 @@ const createBody = (query, variables, uploadables) => {
   }
 }
 
-export const createFetchQueryBase = ({ path, headers, credentials } = {}) => {
+export const createFetchQueryBase = ({ path, headers, credentials, catch: catchCallback } = {}) => {
   const fetchQuery = (operation, variables, cacheConfig, uploadables) => {
     return fetch(path || '/graphql', {
       method: 'POST',
       credentials: credentials || 'omit',
       headers: createHeaders(headers, !uploadables, operation, variables, cacheConfig, uploadables),
       body: createBody(operation.text, variables, uploadables)
-    }).then(response => response.json())
+    }).then((response) => {
+      if (response.status >= 200 && response.status < 300) {
+        return response.json()
+      } else {
+        return Promise.reject(response)
+      }
+    }).catch(catchCallback || ((response) => {
+      console.error(response)
+      return response
+    }))
   }
   return fetchQuery
 }
