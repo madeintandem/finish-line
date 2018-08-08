@@ -127,4 +127,15 @@ describe('createFetchQueryBase', () => {
     expect(await result).toEqual('caught')
     expect(catchCallback).toHaveBeenCalled()
   })
+
+  it('accepts a "then" argument for the promise', async () => {
+    const thenCallback = jest.fn(() => {
+      return 'thenned'
+    })
+
+    const subject = createFetchQueryBase({ then: thenCallback })
+    const result = subject(operation, variables)
+    expect(await result).toEqual('thenned')
+    expect(thenCallback).toHaveBeenCalled()
+  })
 })
